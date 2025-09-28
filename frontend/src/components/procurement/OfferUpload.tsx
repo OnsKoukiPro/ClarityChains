@@ -1,427 +1,304 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
-import { Textarea } from '../ui/textarea';
-import { Input } from '../ui/input';
+import { Progress } from '../ui/progress';
 import {
+  Upload,
   FileText,
-  Download,
-  Edit2,
-  Save,
-  Eye,
+  Image,
+  Archive,
   Mail,
-  Printer,
-  Share,
-  Star,
-  TrendingDown,
-  AlertTriangle,
-  CheckCircle
+  CheckCircle,
+  AlertCircle,
+  X,
+  Download,
+  Eye
 } from 'lucide-react';
 
-interface ExecutiveReportProps {
+interface OfferUploadProps {
+  selectedRFX: any;
   onNavigate: (view: string) => void;
 }
 
-export default function ExecutiveReport({ onNavigate }: ExecutiveReportProps) {
-  const [customNotes, setCustomNotes] = useState('');
-  const [reportTitle, setReportTitle] = useState('Industrial Equipment Procurement Analysis - RFX-2024-001');
-
-  const reportData = {
-    projectId: 'RFX-2024-001',
-    projectTitle: 'Industrial Equipment Procurement',
-    totalValue: '$4,970,000',
-    recommendedSaving: '$487,000',
-    savingsPercentage: '9.8%',
-    recommendedSupplier: 'Global Supply Co',
-    alternativeSupplier: 'TechCorp Industries',
-    analysisDate: new Date().toLocaleDateString(),
-    buyerName: 'Sarah Chen',
-    buyerTitle: 'Procurement Manager'
-  };
-
-  const executiveSummary = `This procurement analysis evaluated three supplier proposals for industrial equipment totaling $4.97M. Through comprehensive TCO analysis, risk assessment, and commercial term evaluation, we recommend Global Supply Co as the primary supplier, delivering $487,000 in savings (9.8%) while maintaining acceptable risk levels and full compliance standards.
-
-Key findings include significant price variations across suppliers (up to 45% for control panels), freight cost estimates requiring verification, and one supplier missing critical ISO certifications. The recommended split-award strategy balances cost optimization with supply chain risk mitigation.`;
-
-  const keyFindings = [
+export default function OfferUpload({ selectedRFX, onNavigate }: OfferUploadProps) {
+  const [dragActive, setDragActive] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState([
     {
-      type: 'savings',
-      title: 'Cost Optimization Opportunity',
-      description: '$487,000 potential savings through strategic supplier selection',
-      impact: 'High',
-      icon: TrendingDown,
-      color: 'text-green-600'
+      id: 1,
+      name: 'Supplier_A_Offer.pdf',
+      size: '2.4 MB',
+      type: 'PDF',
+      status: 'completed',
+      supplier: 'TechCorp Industries',
+      uploadTime: '2 minutes ago'
     },
     {
-      type: 'risk',
-      title: 'Compliance Gap Identified',
-      description: 'Premier Solutions missing ISO certification for critical components',
-      impact: 'High',
-      icon: AlertTriangle,
-      color: 'text-red-600'
+      id: 2,
+      name: 'Supplier_B_Quote.xlsx',
+      size: '1.8 MB',
+      type: 'Excel',
+      status: 'processing',
+      supplier: 'Global Supply Co',
+      uploadTime: '5 minutes ago'
     },
     {
-      type: 'opportunity',
-      title: 'Price Outlier Detection',
-      description: '45% price variation on control panels requires verification',
-      impact: 'Medium',
-      icon: AlertTriangle,
-      color: 'text-orange-600'
-    },
-    {
-      type: 'positive',
-      title: 'Strong Supplier Pool',
-      description: 'All suppliers demonstrate financial stability and delivery capability',
-      impact: 'Positive',
-      icon: CheckCircle,
-      color: 'text-green-600'
+      id: 3,
+      name: 'Supplier_C_Proposal.docx',
+      size: '3.2 MB',
+      type: 'Word',
+      status: 'completed',
+      supplier: 'Premier Solutions',
+      uploadTime: '8 minutes ago'
     }
-  ];
+  ]);
 
-  const supplierSummary = [
-    {
-      name: 'Global Supply Co',
-      recommendation: 'Primary',
-      totalCost: '$4,625,000',
-      savings: '$487,000',
-      leadTime: '2.8 weeks',
-      riskScore: 85,
-      strengths: ['Lowest TCO', 'Full compliance', 'Competitive terms'],
-      concerns: ['Longer lead time', 'Lower risk score than TechCorp']
-    },
-    {
-      name: 'TechCorp Industries',
-      recommendation: 'Alternative',
-      totalCost: '$5,112,000',
-      savings: '$0',
-      leadTime: '2.1 weeks',
-      riskScore: 92,
-      strengths: ['Fastest delivery', 'Highest quality', 'Best risk profile'],
-      concerns: ['Higher cost', 'Premium pricing']
-    },
-    {
-      name: 'Premier Solutions',
-      recommendation: 'Not Recommended',
-      totalCost: '$5,387,000',
-      savings: '-$417,000',
-      leadTime: '2.6 weeks',
-      riskScore: 78,
-      strengths: ['Competitive on some items'],
-      concerns: ['Missing certifications', 'Highest cost', 'Compliance gaps']
+  const handleDrag = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
     }
-  ];
+  }, []);
 
-  const actionItems = [
-    { priority: 'High', task: 'Verify Premier Solutions ISO certification status', owner: 'Procurement Team', due: '2024-12-05' },
-    { priority: 'High', task: 'Confirm freight estimates with Global Supply Co', owner: 'Sarah Chen', due: '2024-12-06' },
-    { priority: 'Medium', task: 'Negotiate payment terms with recommended supplier', owner: 'Finance Team', due: '2024-12-10' },
-    { priority: 'Medium', task: 'Request updated Control Panel pricing verification', owner: 'Technical Team', due: '2024-12-08' }
-  ];
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
 
-  const getRecommendationBadge = (recommendation: string) => {
-    switch (recommendation) {
-      case 'Primary':
-        return <Badge className="bg-green-100 text-green-800"><Star className="w-3 h-3 mr-1" />Primary</Badge>;
-      case 'Alternative':
-        return <Badge className="bg-blue-100 text-blue-800">Alternative</Badge>;
-      case 'Not Recommended':
-        return <Badge className="bg-red-100 text-red-800">Not Recommended</Badge>;
-      default:
-        return <Badge variant="secondary">{recommendation}</Badge>;
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      // Handle file upload logic here
+      console.log(e.dataTransfer.files);
+    }
+  }, []);
+
+  const getFileIcon = (type: string) => {
+    switch (type) {
+      case 'PDF': return <FileText className="w-5 h-5 text-red-500" />;
+      case 'Excel': return <FileText className="w-5 h-5 text-green-500" />;
+      case 'Word': return <FileText className="w-5 h-5 text-blue-500" />;
+      case 'Image': return <Image className="w-5 h-5 text-purple-500" />;
+      case 'Archive': return <Archive className="w-5 h-5 text-orange-500" />;
+      case 'Email': return <Mail className="w-5 h-5 text-gray-500" />;
+      default: return <FileText className="w-5 h-5 text-gray-500" />;
     }
   };
 
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'High': return 'text-red-600 bg-red-100';
-      case 'Medium': return 'text-orange-600 bg-orange-100';
-      case 'Low': return 'text-green-600 bg-green-100';
-      default: return 'text-gray-600 bg-gray-100';
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'completed': return <CheckCircle className="w-4 h-4 text-green-500" />;
+      case 'processing': return <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />;
+      case 'error': return <AlertCircle className="w-4 h-4 text-red-500" />;
+      default: return null;
     }
   };
+
+  const acceptedFormats = [
+    { type: 'PDF', description: 'Portable Document Format', extensions: '.pdf' },
+    { type: 'Excel', description: 'Microsoft Excel', extensions: '.xlsx, .xls' },
+    { type: 'Word', description: 'Microsoft Word', extensions: '.docx, .doc' },
+    { type: 'Email', description: 'Email Files', extensions: '.eml, .msg' },
+    { type: 'Images', description: 'Image Files', extensions: '.jpg, .png, .tiff' },
+    { type: 'Archives', description: 'Compressed Files', extensions: '.zip, .rar' }
+  ];
 
   return (
-    <div className="w-full max-w-full px-4 sm:px-6 lg:px-8 space-y-6">
+    <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-foreground">Executive Report</h1>
-          <p className="text-muted-foreground">Comprehensive procurement analysis and recommendations</p>
+          <h1 className="text-2xl font-semibold text-foreground">Upload Supplier Offers</h1>
+          <p className="text-muted-foreground">
+            {selectedRFX ? `For ${selectedRFX.title} (${selectedRFX.id})` : 'Upload and process supplier offer files'}
+          </p>
         </div>
         <div className="flex space-x-2">
-          <Button variant="outline" onClick={() => onNavigate('analysis')}>
-            Back to Analysis
+          <Button variant="outline" onClick={() => onNavigate('dashboard')}>
+            Back to Dashboard
           </Button>
-          <Button>
-            <Download className="w-4 h-4 mr-2" />
-            Export Word Report
+          <Button onClick={() => onNavigate('processing')}>
+            Process Files
           </Button>
         </div>
       </div>
 
-      {/* Report Header */}
-      <Card className="w-full">
-        <CardContent className="p-6">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex-1 min-w-0">
-              <Input
-                value={reportTitle}
-                onChange={(e) => setReportTitle(e.target.value)}
-                className="text-xl font-semibold border-none p-0 bg-transparent w-full"
-              />
-              <div className="flex items-center space-x-4 mt-2 text-sm text-muted-foreground flex-wrap">
-                <span>Project ID: {reportData.projectId}</span>
-                <span>•</span>
-                <span>Analysis Date: {reportData.analysisDate}</span>
-                <span>•</span>
-                <span>Prepared by: {reportData.buyerName}</span>
+      {/* Upload Area */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Drag & Drop Files</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div
+            className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
+              dragActive
+                ? 'border-primary bg-primary/5'
+                : 'border-border hover:border-primary/50'
+            }`}
+            onDragEnter={handleDrag}
+            onDragLeave={handleDrag}
+            onDragOver={handleDrag}
+            onDrop={handleDrop}
+          >
+            <Upload className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg font-medium mb-2">Drop your supplier offer files here</h3>
+            <p className="text-muted-foreground mb-4">
+              Or click to browse and select files from your computer
+            </p>
+            <Button>
+              Choose Files
+            </Button>
+
+            <div className="mt-6 text-sm text-muted-foreground">
+              <p className="mb-2">Supported file types:</p>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                {acceptedFormats.map((format, index) => (
+                  <div key={index} className="flex items-center space-x-2">
+                    <Badge variant="outline" className="text-xs">
+                      {format.extensions}
+                    </Badge>
+                  </div>
+                ))}
               </div>
             </div>
-            <div className="flex space-x-2 flex-shrink-0 ml-4">
-              <Button variant="outline" size="sm">
-                <Edit2 className="w-4 h-4 mr-2" />
-                Edit
-              </Button>
-              <Button variant="outline" size="sm">
-                <Eye className="w-4 h-4 mr-2" />
-                Preview
-              </Button>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-accent/50 rounded-lg w-full">
-            <div className="text-center">
-              <p className="text-2xl font-bold text-primary">{reportData.totalValue}</p>
-              <p className="text-sm text-muted-foreground">Total Project Value</p>
-            </div>
-            <div className="text-center">
-              <p className="text-2xl font-bold text-green-600">{reportData.recommendedSaving}</p>
-              <p className="text-sm text-muted-foreground">Potential Savings</p>
-            </div>
-            <div className="text-center">
-              <p className="text-2xl font-bold text-green-600">{reportData.savingsPercentage}</p>
-              <p className="text-sm text-muted-foreground">Savings Percentage</p>
-            </div>
-            <div className="text-center">
-              <p className="text-lg font-bold text-blue-600">{reportData.recommendedSupplier}</p>
-              <p className="text-sm text-muted-foreground">Recommended Supplier</p>
-            </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Executive Summary */}
-      <Card className="w-full">
+      {/* Uploaded Files */}
+      <Card>
         <CardHeader>
-          <CardTitle>Executive Summary</CardTitle>
-        </CardHeader>
-        <CardContent className="w-full">
-          <div className="space-y-4 w-full">
-            <p className="text-foreground leading-relaxed w-full">{executiveSummary}</p>
-
-            <div className="border-l-4 border-primary pl-4 w-full">
-              <p className="font-medium text-primary">Recommendation Summary:</p>
-              <p className="text-sm text-muted-foreground mt-1">
-                Award primary contract to <strong>{reportData.recommendedSupplier}</strong> for ${reportData.totalValue}
-                with potential for {reportData.savingsPercentage} cost reduction. Consider {reportData.alternativeSupplier}
-                as backup supplier for risk mitigation.
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Key Findings */}
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle>Key Findings</CardTitle>
-        </CardHeader>
-        <CardContent className="w-full">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-            {keyFindings.map((finding, index) => (
-              <div key={index} className="border border-border rounded-lg p-4 w-full">
-                <div className="flex items-start space-x-3 w-full">
-                  <finding.icon className={`w-5 h-5 mt-0.5 ${finding.color} flex-shrink-0`} />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-medium">{finding.title}</h4>
-                      <Badge variant="outline" className="text-xs">
-                        {finding.impact}
-                      </Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground">{finding.description}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Supplier Comparison Table */}
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle>Supplier Comparison Summary</CardTitle>
-        </CardHeader>
-        <CardContent className="w-full">
-          <div className="space-y-4 w-full">
-            {supplierSummary.map((supplier, index) => (
-              <div key={index} className="border border-border rounded-lg p-4 w-full">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center space-x-3 min-w-0">
-                    <h4 className="font-medium text-lg truncate">{supplier.name}</h4>
-                    {getRecommendationBadge(supplier.recommendation)}
-                  </div>
-                  <div className="text-right flex-shrink-0 ml-4">
-                    <p className="font-semibold">{supplier.totalCost}</p>
-                    <p className="text-sm text-muted-foreground">Total Landed Cost</p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3 text-sm w-full">
-                  <div>
-                    <p className="text-muted-foreground">Savings</p>
-                    <p className={`font-medium ${supplier.savings.startsWith('-') ? 'text-red-600' : supplier.savings === '$0' ? 'text-gray-600' : 'text-green-600'}`}>
-                      {supplier.savings}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-muted-foreground">Lead Time</p>
-                    <p className="font-medium">{supplier.leadTime}</p>
-                  </div>
-                  <div>
-                    <p className="text-muted-foreground">Risk Score</p>
-                    <p className="font-medium">{supplier.riskScore}/100</p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm w-full">
-                  <div>
-                    <p className="font-medium text-green-600 mb-1">Strengths:</p>
-                    <ul className="space-y-1">
-                      {supplier.strengths.map((strength, i) => (
-                        <li key={i} className="flex items-center text-muted-foreground">
-                          <div className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2 flex-shrink-0" />
-                          {strength}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div>
-                    <p className="font-medium text-orange-600 mb-1">Concerns:</p>
-                    <ul className="space-y-1">
-                      {supplier.concerns.map((concern, i) => (
-                        <li key={i} className="flex items-center text-muted-foreground">
-                          <div className="w-1.5 h-1.5 bg-orange-500 rounded-full mr-2 flex-shrink-0" />
-                          {concern}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Action Items */}
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle>Action Items & Next Steps</CardTitle>
-        </CardHeader>
-        <CardContent className="w-full">
-          <div className="space-y-3 w-full">
-            {actionItems.map((item, index) => (
-              <div key={index} className="flex items-center justify-between p-3 border border-border rounded-lg w-full">
-                <div className="flex items-center space-x-3 min-w-0">
-                  <Badge className={getPriorityColor(item.priority)}>
-                    {item.priority}
-                  </Badge>
-                  <div className="min-w-0">
-                    <p className="font-medium truncate">{item.task}</p>
-                    <p className="text-sm text-muted-foreground">Assigned to: {item.owner}</p>
-                  </div>
-                </div>
-                <div className="text-right flex-shrink-0 ml-4">
-                  <p className="text-sm font-medium">Due: {item.due}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Custom Notes */}
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle>Additional Notes & Comments</CardTitle>
-        </CardHeader>
-        <CardContent className="w-full">
-          <Textarea
-            placeholder="Add any additional insights, context, or special considerations for this procurement decision..."
-            value={customNotes}
-            onChange={(e) => setCustomNotes(e.target.value)}
-            className="min-h-32 w-full"
-          />
-          <div className="flex justify-end mt-3">
+          <CardTitle className="flex items-center justify-between">
+            <span>Uploaded Files ({uploadedFiles.length})</span>
             <Button variant="outline" size="sm">
-              <Save className="w-4 h-4 mr-2" />
-              Save Notes
+              Clear All
             </Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Export Options */}
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle>Export & Share Options</CardTitle>
+          </CardTitle>
         </CardHeader>
-        <CardContent className="w-full">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full">
-            <Button className="h-20 flex flex-col items-center justify-center w-full">
-              <FileText className="w-6 h-6 mb-2" />
-              <span>Word Document</span>
-            </Button>
+        <CardContent>
+          <div className="space-y-3">
+            {uploadedFiles.map((file) => (
+              <div key={file.id} className="flex items-center justify-between p-4 border border-border rounded-lg">
+                <div className="flex items-center space-x-3 flex-1">
+                  {getFileIcon(file.type)}
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-2">
+                      <h4 className="font-medium">{file.name}</h4>
+                      {getStatusIcon(file.status)}
+                    </div>
+                    <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+                      <span>{file.size}</span>
+                      <span>•</span>
+                      <span>{file.supplier}</span>
+                      <span>•</span>
+                      <span>{file.uploadTime}</span>
+                    </div>
+                    {file.status === 'processing' && (
+                      <div className="mt-2">
+                        <Progress value={65} className="h-1" />
+                      </div>
+                    )}
+                  </div>
+                </div>
 
-            <Button variant="outline" className="h-20 flex flex-col items-center justify-center w-full">
-              <Printer className="w-6 h-6 mb-2" />
-              <span>PDF Report</span>
-            </Button>
-
-            <Button variant="outline" className="h-20 flex flex-col items-center justify-center w-full">
-              <Mail className="w-6 h-6 mb-2" />
-              <span>Email Report</span>
-            </Button>
-
-            <Button variant="outline" className="h-20 flex flex-col items-center justify-center w-full">
-              <Share className="w-6 h-6 mb-2" />
-              <span>Share Link</span>
-            </Button>
+                <div className="flex items-center space-x-2">
+                  <Button variant="ghost" size="sm">
+                    <Eye className="w-4 h-4" />
+                  </Button>
+                  <Button variant="ghost" size="sm">
+                    <Download className="w-4 h-4" />
+                  </Button>
+                  <Button variant="ghost" size="sm">
+                    <X className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            ))}
           </div>
         </CardContent>
       </Card>
 
-      {/* Final Actions */}
-      <Card className="border-green-200 bg-green-50 w-full">
-        <CardContent className="p-6 w-full">
-          <div className="flex items-center justify-between w-full">
-            <div className="min-w-0">
-              <h3 className="font-medium text-green-800">Report Complete</h3>
-              <p className="text-sm text-green-700 mt-1">
-                Executive report is ready for export and distribution to stakeholders.
-              </p>
+      {/* File Processing Status */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                <CheckCircle className="w-6 h-6 text-green-600" />
+              </div>
+              <div>
+                <h3 className="font-medium">Files Processed</h3>
+                <p className="text-2xl font-semibold">2 / 3</p>
+              </div>
             </div>
-            <div className="flex space-x-2 flex-shrink-0 ml-4">
-              <Button onClick={() => onNavigate('recommendation')}>
-                View Final Recommendations
-              </Button>
-              <Button variant="outline">
-                <Download className="w-4 h-4 mr-2" />
-                Export Final Report
-              </Button>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                <FileText className="w-6 h-6 text-blue-600" />
+              </div>
+              <div>
+                <h3 className="font-medium">Line Items Extracted</h3>
+                <p className="text-2xl font-semibold">247</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                <AlertCircle className="w-6 h-6 text-orange-600" />
+              </div>
+              <div>
+                <h3 className="font-medium">Items Need Review</h3>
+                <p className="text-2xl font-semibold">12</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Instructions */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Upload Instructions</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="flex items-start space-x-3">
+              <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-sm font-medium">1</div>
+              <div>
+                <h4 className="font-medium">Upload Supplier Files</h4>
+                <p className="text-sm text-muted-foreground">
+                  Drag and drop or select multiple files from different suppliers. Each file should contain pricing, terms, and specifications.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start space-x-3">
+              <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-sm font-medium">2</div>
+              <div>
+                <h4 className="font-medium">Automatic Processing</h4>
+                <p className="text-sm text-muted-foreground">
+                  Our AI will extract text, tables, and attachments, auto-detect currencies and units, and normalize line items for comparison.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start space-x-3">
+              <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-sm font-medium">3</div>
+              <div>
+                <h4 className="font-medium">Review & Analyze</h4>
+                <p className="text-sm text-muted-foreground">
+                  Review extracted data, make corrections if needed, and let the system run comprehensive analysis including TCO, risk assessment, and recommendations.
+                </p>
+              </div>
             </div>
           </div>
         </CardContent>
