@@ -123,6 +123,45 @@ export default function OfferUpload({ selectedRFX, onNavigate }: OfferUploadProp
           </Button>
         </div>
       </div>
+            {/* Instructions */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Upload Instructions</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="flex items-start space-x-3">
+              <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-sm font-medium">1</div>
+              <div>
+                <h4 className="font-medium">Upload Supplier Files</h4>
+                <p className="text-sm text-muted-foreground">
+                  Drag and drop or select multiple files from different suppliers. Each file should contain pricing, terms, and specifications.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start space-x-3">
+              <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-sm font-medium">2</div>
+              <div>
+                <h4 className="font-medium">Automatic Processing</h4>
+                <p className="text-sm text-muted-foreground">
+                  Our AI will extract text, tables, and attachments, auto-detect currencies and units, and normalize line items for comparison.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start space-x-3">
+              <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-sm font-medium">3</div>
+              <div>
+                <h4 className="font-medium">Review & Analyze</h4>
+                <p className="text-sm text-muted-foreground">
+                  Review extracted data, make corrections if needed, and let the system run comprehensive analysis including TCO, risk assessment, and recommendations.
+                </p>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Upload Area */}
       <Card>
@@ -263,46 +302,6 @@ export default function OfferUpload({ selectedRFX, onNavigate }: OfferUploadProp
           </CardContent>
         </Card>
       </div>
-
-      {/* Instructions */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Upload Instructions</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="flex items-start space-x-3">
-              <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-sm font-medium">1</div>
-              <div>
-                <h4 className="font-medium">Upload Supplier Files</h4>
-                <p className="text-sm text-muted-foreground">
-                  Drag and drop or select multiple files from different suppliers. Each file should contain pricing, terms, and specifications.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start space-x-3">
-              <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-sm font-medium">2</div>
-              <div>
-                <h4 className="font-medium">Automatic Processing</h4>
-                <p className="text-sm text-muted-foreground">
-                  Our AI will extract text, tables, and attachments, auto-detect currencies and units, and normalize line items for comparison.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start space-x-3">
-              <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-sm font-medium">3</div>
-              <div>
-                <h4 className="font-medium">Review & Analyze</h4>
-                <p className="text-sm text-muted-foreground">
-                  Review extracted data, make corrections if needed, and let the system run comprehensive analysis including TCO, risk assessment, and recommendations.
-                </p>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }
