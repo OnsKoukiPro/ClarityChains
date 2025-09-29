@@ -4,13 +4,13 @@ import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Progress } from '../ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
-import {
-  Star,
-  CheckCircle,
-  AlertTriangle,
-  TrendingDown,
-  DollarSign,
-  Clock,
+import { 
+  Star, 
+  CheckCircle, 
+  AlertTriangle, 
+  TrendingDown, 
+  DollarSign, 
+  Clock, 
   Shield,
   Award,
   FileCheck,
@@ -238,11 +238,11 @@ export default function SupplierRecommendation({ onNavigate }: SupplierRecommend
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {Object.entries(recommendationStrategies).map(([key, strategy]) => (
-              <Card
-                key={key}
+              <Card 
+                key={key} 
                 className={`cursor-pointer transition-all ${
-                  selectedStrategy === key
-                    ? 'border-primary bg-primary/5 shadow-md'
+                  selectedStrategy === key 
+                    ? 'border-primary bg-primary/5 shadow-md' 
                     : 'hover:shadow-sm'
                 }`}
                 onClick={() => setSelectedStrategy(key)}
@@ -257,9 +257,9 @@ export default function SupplierRecommendation({ onNavigate }: SupplierRecommend
                       </Badge>
                     )}
                   </div>
-
+                  
                   <p className="text-sm text-muted-foreground mb-3">{strategy.subtitle}</p>
-
+                  
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span>Savings:</span>
@@ -305,7 +305,7 @@ export default function SupplierRecommendation({ onNavigate }: SupplierRecommend
                 <p className="text-sm text-muted-foreground">Total Savings ({currentStrategy.savingsPercentage})</p>
               </CardContent>
             </Card>
-
+            
             <Card>
               <CardContent className="p-4 text-center">
                 <Shield className="w-8 h-8 text-blue-600 mx-auto mb-2" />
@@ -313,7 +313,7 @@ export default function SupplierRecommendation({ onNavigate }: SupplierRecommend
                 <p className="text-sm text-muted-foreground">Risk Level</p>
               </CardContent>
             </Card>
-
+            
             <Card>
               <CardContent className="p-4 text-center">
                 <Users className="w-8 h-8 text-purple-600 mx-auto mb-2" />
@@ -340,7 +340,7 @@ export default function SupplierRecommendation({ onNavigate }: SupplierRecommend
                 ))}
               </ul>
             </div>
-
+            
             <div>
               <h4 className="font-medium text-orange-600 mb-3 flex items-center">
                 <AlertTriangle className="w-4 h-4 mr-2" />
@@ -373,7 +373,7 @@ export default function SupplierRecommendation({ onNavigate }: SupplierRecommend
                   <Badge variant="outline">Weight: {factor.weight}%</Badge>
                 </div>
                 <p className="text-sm text-muted-foreground mb-3">{factor.description}</p>
-
+                
                 <div className="grid grid-cols-3 gap-4">
                   <div className="text-center">
                     <p className="text-xs text-muted-foreground mb-1">Single Source</p>
@@ -409,7 +409,7 @@ export default function SupplierRecommendation({ onNavigate }: SupplierRecommend
                 <div className="flex-shrink-0 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-semibold text-sm">
                   {index + 1}
                 </div>
-
+                
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="font-medium">{phase.phase}</h4>
@@ -418,7 +418,7 @@ export default function SupplierRecommendation({ onNavigate }: SupplierRecommend
                       <Badge variant="outline">{phase.owner}</Badge>
                     </div>
                   </div>
-
+                  
                   <ul className="space-y-1 text-sm text-muted-foreground">
                     {phase.tasks.map((task, taskIndex) => (
                       <li key={taskIndex} className="flex items-start">
@@ -452,7 +452,7 @@ export default function SupplierRecommendation({ onNavigate }: SupplierRecommend
                     <p className="text-sm text-muted-foreground">{approval.role}</p>
                   </div>
                 </div>
-
+                
                 <div className="flex items-center space-x-3">
                   {approval.date && (
                     <span className="text-sm text-muted-foreground">{approval.date}</span>
@@ -472,7 +472,7 @@ export default function SupplierRecommendation({ onNavigate }: SupplierRecommend
             <div>
               <h3 className="font-medium text-blue-800">Ready for Final Decision</h3>
               <p className="text-sm text-blue-700 mt-1">
-                Complete procurement analysis with {currentStrategy.title} recommendation.
+                Complete procurement analysis with {currentStrategy.title} recommendation. 
                 Export findings or submit for stakeholder approval.
               </p>
             </div>

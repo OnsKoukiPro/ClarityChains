@@ -5,7 +5,11 @@ import { Badge } from './ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Bell, Search, Plus, Filter, Download } from 'lucide-react';
 
-export default function ProcurementHeader() {
+interface ProcurementHeaderProps {
+  onNavigate?: (view: string) => void;
+}
+
+export default function ProcurementHeader({ onNavigate }: ProcurementHeaderProps) {
   return (
     <header className="border-b border-border bg-background px-6 py-4">
       <div className="flex items-center justify-between">
@@ -24,7 +28,7 @@ export default function ProcurementHeader() {
         </div>
 
         <div className="flex items-center space-x-4">
-          <Button size="sm">
+          <Button size="sm" onClick={() => onNavigate?.('create-rfx')}>
             <Plus className="w-4 h-4 mr-2" />
             New RFX
           </Button>

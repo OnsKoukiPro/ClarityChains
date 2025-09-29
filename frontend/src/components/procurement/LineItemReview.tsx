@@ -5,12 +5,12 @@ import { Badge } from '../ui/badge';
 import { Input } from '../ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Checkbox } from '../ui/checkbox';
-import {
-  CheckCircle,
-  AlertCircle,
-  Edit2,
-  Save,
-  X,
+import { 
+  CheckCircle, 
+  AlertCircle, 
+  Edit2, 
+  Save, 
+  X, 
   Filter,
   Search,
   ArrowUpDown,
@@ -206,7 +206,7 @@ export default function LineItemReview({ onNavigate }: LineItemReviewProps) {
                 className="pl-10"
               />
             </div>
-
+            
             <Select value={filterStatus} onValueChange={setFilterStatus}>
               <SelectTrigger className="w-48">
                 <SelectValue placeholder="Filter by status" />
@@ -262,7 +262,7 @@ export default function LineItemReview({ onNavigate }: LineItemReviewProps) {
                         </div>
                       </div>
                       <p className="text-sm text-muted-foreground">SKU: {item.sku}</p>
-
+                      
                       {item.issues && (
                         <div className="mt-2 space-y-1">
                           {item.issues.map((issue, index) => (
@@ -275,7 +275,7 @@ export default function LineItemReview({ onNavigate }: LineItemReviewProps) {
                       )}
                     </div>
                   </div>
-
+                  
                   <div className="flex space-x-2">
                     {item.needsReview && (
                       <Button variant="outline" size="sm">

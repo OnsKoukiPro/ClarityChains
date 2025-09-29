@@ -3,12 +3,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Progress } from '../ui/progress';
-import {
-  FileText,
-  Clock,
-  Users,
-  DollarSign,
-  TrendingUp,
+import { 
+  FileText, 
+  Clock, 
+  Users, 
+  DollarSign, 
+  TrendingUp, 
   AlertTriangle,
   CheckCircle,
   MoreHorizontal,
@@ -202,8 +202,8 @@ export default function RFXDashboard({ onSelectRFX, onNavigate }: RFXDashboardPr
                     <Progress value={project.progress} className="h-2" />
                   </div>
                   <div className="flex space-x-2">
-                    <Button
-                      variant="outline"
+                    <Button 
+                      variant="outline" 
                       size="sm"
                       onClick={() => {
                         onSelectRFX(project);
@@ -213,7 +213,7 @@ export default function RFXDashboard({ onSelectRFX, onNavigate }: RFXDashboardPr
                       <Eye className="w-4 h-4 mr-2" />
                       View Analysis
                     </Button>
-                    <Button
+                    <Button 
                       size="sm"
                       onClick={() => {
                         onSelectRFX(project);

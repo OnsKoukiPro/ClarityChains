@@ -351,7 +351,7 @@ export function FinancingModule({ subPage, selectedApp, onSubPageChange, appCont
                 <Target className="w-8 h-8 text-yellow-900" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-yellow-900 mb-2">🎯 ClarityChain PUBLISHING INVESTMENT</h2>
+                <h2 className="text-2xl font-bold text-yellow-900 mb-2">🎯 KARBON PUBLISHING INVESTMENT</h2>
                 <p className="text-yellow-800">Accelerate your app growth with our publishing partnership</p>
               </div>
             </div>

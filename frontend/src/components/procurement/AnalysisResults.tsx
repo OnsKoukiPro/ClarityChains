@@ -4,14 +4,14 @@ import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Progress } from '../ui/progress';
-import {
-  TrendingDown,
-  TrendingUp,
-  AlertTriangle,
-  CheckCircle,
-  DollarSign,
-  Clock,
-  Shield,
+import { 
+  TrendingDown, 
+  TrendingUp, 
+  AlertTriangle, 
+  CheckCircle, 
+  DollarSign, 
+  Clock, 
+  Shield, 
   Truck,
   FileBarChart,
   Eye,
@@ -247,7 +247,7 @@ export default function AnalysisResults({ onNavigate }: AnalysisResultsProps) {
                         <p className="text-sm text-muted-foreground">Landed Cost</p>
                       </div>
                     </div>
-
+                    
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                       <div>
                         <p className="text-muted-foreground">Savings</p>
@@ -375,14 +375,14 @@ export default function AnalysisResults({ onNavigate }: AnalysisResultsProps) {
                   </div>
                 ))}
               </div>
-
+              
               <div className="mt-6 p-4 bg-blue-50 rounded-lg">
                 <div className="flex items-center space-x-2 mb-2">
                   <AlertTriangle className="w-4 h-4 text-blue-600" />
                   <span className="font-medium text-blue-800">Cost Estimation Note</span>
                 </div>
                 <p className="text-sm text-blue-700">
-                  Freight, insurance, and handling costs are estimated based on location, weight, and industry standards.
+                  Freight, insurance, and handling costs are estimated based on location, weight, and industry standards. 
                   Please verify these costs with suppliers for accurate TCO calculation.
                 </p>
               </div>
@@ -437,7 +437,7 @@ export default function AnalysisResults({ onNavigate }: AnalysisResultsProps) {
                     <h4 className="font-semibold text-green-800">Primary Recommendation</h4>
                   </div>
                   <p className="text-green-700 mb-3">
-                    <strong>Global Supply Co</strong> offers the best overall value with $487,000 in savings (9.8%)
+                    <strong>Global Supply Co</strong> offers the best overall value with $487,000 in savings (9.8%) 
                     while maintaining acceptable risk levels and compliance standards.
                   </p>
                   <div className="grid grid-cols-2 gap-4 text-sm">
@@ -461,7 +461,7 @@ export default function AnalysisResults({ onNavigate }: AnalysisResultsProps) {
 
                 <div className="space-y-4">
                   <h4 className="font-medium">Alternative Strategies</h4>
-
+                  
                   <div className="p-4 border border-border rounded-lg">
                     <h5 className="font-medium mb-2">Split Award Strategy</h5>
                     <p className="text-sm text-muted-foreground mb-2">
