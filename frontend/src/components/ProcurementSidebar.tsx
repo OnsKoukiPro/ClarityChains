@@ -23,6 +23,9 @@ import {
   HelpCircle,
 } from "lucide-react";
 
+// Import your logo
+import logo from "../assets/logo3d.png";
+
 interface ProcurementSidebarProps {
   currentView: string;
   onNavigate: (view: string) => void;
@@ -78,13 +81,16 @@ export default function ProcurementSidebar({
   ];
 
   return (
-    <Sidebar className="w-64 border-r border-border">
+    <Sidebar className="w-65 border-r border-border">
       <SidebarHeader className="p-6">
         <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-            <span className="text-primary-foreground font-bold">
-              C
-            </span>
+          {/* Replace the C with your logo */}
+          <div className="w-12 h-12 flex items-center justify-center">
+            <img
+              src={logo}
+              alt="ClarityChain Logo"
+              className="w-full h-full object-contain"
+            />
           </div>
           <div>
             <h2 className="font-semibold text-foreground">
