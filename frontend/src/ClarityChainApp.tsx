@@ -39,13 +39,15 @@ export default function ClarityChainApp() {
   };
 
   return (
-        <SidebarProvider>
+    <SidebarProvider>
       <div className="flex min-h-screen w-full bg-background">
         <div className="flex-shrink-0">
           <ProcurementSidebar currentView={currentView} onNavigate={setCurrentView} />
         </div>
         <div className="flex-1 flex flex-col min-w-0">
-          <ProcurementHeader onNavigate={setCurrentView} />
+          <div className="px-6">
+            <ProcurementHeader onNavigate={setCurrentView} />
+          </div>
           <main className="flex-1 w-full min-w-0 p-6 overflow-auto">
             {renderCurrentView()}
           </main>
