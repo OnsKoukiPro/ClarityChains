@@ -114,7 +114,7 @@ export function ClientSidebar({ activeModule, onModuleChange }: ClientSidebarPro
             <span className="text-sidebar-primary-foreground font-semibold">K</span>
           </div>
           <div>
-            <h1 className="font-semibold text-sidebar-foreground">ClarityChains</h1>
+            <h1 className="font-semibold text-sidebar-foreground">ClarityChain</h1>
             <p className="text-xs text-sidebar-foreground/60">Developer</p>
           </div>
         </div>

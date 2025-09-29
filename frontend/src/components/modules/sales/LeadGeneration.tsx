@@ -233,7 +233,7 @@ export function LeadGeneration({ selectedLead, onLeadSelect, onBack }: LeadGener
                   <div className="p-4 bg-blue-50 rounded-lg">
                     <p className="text-sm text-blue-800">
                       "High-value prospect. Focus on ASO improvements and revenue optimization.
-                      Mention case study of similar app that increased MRR by 340% using ClarityChains insights."
+                      Mention case study of similar app that increased MRR by 340% using ClarityChain insights."
                     </p>
                   </div>
                 </div>

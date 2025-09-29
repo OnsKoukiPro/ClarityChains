@@ -116,7 +116,7 @@ export function LoginFlow({ onComplete }: LoginFlowProps) {
           <div className="w-16 h-16 bg-primary rounded-xl flex items-center justify-center mx-auto mb-4">
             <span className="text-primary-foreground font-semibold text-xl">K</span>
           </div>
-          <h1 className="text-3xl font-semibold mb-2">Welcome to ClarityChains</h1>
+          <h1 className="text-3xl font-semibold mb-2">Welcome to ClarityChain</h1>
           <p className="text-muted-foreground text-lg">AI Intelligence Platform for App Developers</p>
         </div>
 

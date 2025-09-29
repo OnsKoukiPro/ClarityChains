@@ -118,7 +118,7 @@ export function AssistantModule() {
     {
       id: '1',
       type: 'assistant',
-      content: '👋 Hello! I\'m your ClarityChains AI Assistant. I can help you analyze app market trends, competitive intelligence, user behavior patterns, and monetization strategies. What would you like to explore today?',
+      content: '👋 Hello! I\'m your ClarityChain AI Assistant. I can help you analyze app market trends, competitive intelligence, user behavior patterns, and monetization strategies. What would you like to explore today?',
       timestamp: new Date(),
       actions: [
         { label: "📈 Market Trends", icon: <TrendingUp className="w-4 h-4" />, onClick: () => {} },
@@ -189,7 +189,7 @@ export function AssistantModule() {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="flex items-center gap-2">
-                🤖 ClarityChains AI Assistant
+                🤖 ClarityChain AI Assistant
               </CardTitle>
               <p className="text-sm text-muted-foreground mt-1">
                 Powered by GPT-4 • Analyzing 50M+ app data points • 94% accuracy rate

@@ -88,7 +88,7 @@ export default function ProcurementSidebar({
           </div>
           <div>
             <h2 className="font-semibold text-foreground">
-              ClarityChains
+              ClarityChain
             </h2>
             <p className="text-sm text-muted-foreground">
               Procurement Intelligence

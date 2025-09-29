@@ -210,7 +210,7 @@ export function SupportModule({ subPage, onSubPageChange }: SupportModuleProps) 
           <div className="space-y-4">
             {[
               {
-                question: "How do I connect my app to ClarityChains?",
+                question: "How do I connect my app to ClarityChain?",
                 answer: "Use the App Store Connect integration in your dashboard to sync your app data automatically."
               },
               {
@@ -244,7 +244,7 @@ function ChatbotInterface({ onBack }: { onBack: () => void }) {
     {
       id: 1,
       type: 'bot',
-      message: "Hi! I'm ClarityChains AI Assistant. How can I help you today?",
+      message: "Hi! I'm ClarityChain AI Assistant. How can I help you today?",
       timestamp: new Date()
     }
   ]);
@@ -310,7 +310,7 @@ function ChatbotInterface({ onBack }: { onBack: () => void }) {
         <CardHeader className="border-b">
           <CardTitle className="flex items-center gap-2">
             <Bot className="w-5 h-5 text-blue-600" />
-            ClarityChains AI Assistant
+            ClarityChain AI Assistant
             <Badge className="bg-green-100 text-green-800 ml-2">Online</Badge>
           </CardTitle>
         </CardHeader>
@@ -382,7 +382,7 @@ function DocumentationCenter({ onBack }: { onBack: () => void }) {
         <CardHeader>
           <CardTitle>📚 Documentation Center</CardTitle>
           <p className="text-muted-foreground">
-            Comprehensive guides and tutorials for all ClarityChains features
+            Comprehensive guides and tutorials for all ClarityChain features
           </p>
         </CardHeader>
         <CardContent>

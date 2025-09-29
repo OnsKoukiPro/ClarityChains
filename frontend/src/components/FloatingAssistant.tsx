@@ -68,7 +68,7 @@ export function FloatingAssistant({ isOpen, onToggle, onNavigateToAssistant }: F
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
-              🤖 ClarityChains AI Assistant
+              🤖 ClarityChain AI Assistant
             </CardTitle>
             <div className="flex items-center gap-1">
               <Button

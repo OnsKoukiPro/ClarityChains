@@ -1,7 +1,7 @@
 
-  # ClarityChains
+  # ClarityChain
 
-  This is a code bundle for ClarityChains.
+  This is a code bundle for ClarityChain.
 
   ## Running the code
 

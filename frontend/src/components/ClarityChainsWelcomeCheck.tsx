@@ -6,7 +6,7 @@ import { WelcomeReportBuilder } from './welcome/WelcomeReportBuilder';
 import { Progress } from './ui/progress';
 import { Badge } from './ui/badge';
 
-interface ClarityChainsWelcomeCheckProps {
+interface ClarityChainWelcomeCheckProps {
   appData?: any;
   onComplete: (welcomeData: any) => void;
   onSetAppContext?: (appData: any) => void;
@@ -20,7 +20,7 @@ interface WelcomeData {
   [key: string]: any;
 }
 
-export function ClarityChainsWelcomeCheck({ appData, onComplete, onSetAppContext }: ClarityChainsWelcomeCheckProps) {
+export function ClarityChainWelcomeCheck({ appData, onComplete, onSetAppContext }: ClarityChainWelcomeCheckProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [welcomeData, setWelcomeData] = useState<WelcomeData>({});
 
@@ -110,7 +110,7 @@ export function ClarityChainsWelcomeCheck({ appData, onComplete, onSetAppContext
                 <span className="text-primary-foreground font-semibold">K</span>
               </div>
               <div>
-                <h1 className="font-semibold">ClarityChains Welcome Check</h1>
+                <h1 className="font-semibold">ClarityChain Welcome Check</h1>
                 <p className="text-sm text-muted-foreground">Genre Intelligence Analysis for {appData?.name || 'Your App'}</p>
               </div>
             </div>
@@ -168,7 +168,7 @@ export function ClarityChainsWelcomeCheck({ appData, onComplete, onSetAppContext
       {/* Footer */}
       <div className="text-center py-6">
         <p className="text-sm text-muted-foreground">
-          ClarityChains Intelligence Platform • Comprehensive Market Analysis
+          ClarityChain Intelligence Platform • Comprehensive Market Analysis
         </p>
       </div>
     </div>

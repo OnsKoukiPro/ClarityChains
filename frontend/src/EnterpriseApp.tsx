@@ -117,7 +117,7 @@ export default function EnterpriseApp() {
     };
 
     return moduleMap[moduleId as keyof typeof moduleMap] || {
-      title: 'ClarityChains Intelligence',
+      title: 'ClarityChain Intelligence',
       subtitle: 'Enterprise app intelligence platform'
     };
   };

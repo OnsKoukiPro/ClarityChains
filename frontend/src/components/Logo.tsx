@@ -1,5 +1,5 @@
 import React from 'react';
-import ClarityChainsLogoWhite from 'figma:asset/8cea1a267cd31dbfc8ab290dd155e3aaf5db0a96.png';
+import ClarityChainLogoWhite from 'figma:asset/8cea1a267cd31dbfc8ab290dd155e3aaf5db0a96.png';
 
 interface LogoProps {
   size?: 'sm' | 'default' | 'lg' | 'xl' | 'hero' | 'mega' | 'ultra';
@@ -43,8 +43,8 @@ export function Logo({ size = 'default', className = '' }: LogoProps) {
   return (
     <div className={`flex items-center justify-center ${className}`}>
       <img
-        src={ClarityChainsLogoWhite}
-        alt="ClarityChains"
+        src={ClarityChainLogoWhite}
+        alt="ClarityChain"
         className={`${config.height} ${config.width} object-contain bg-transparent`}
       />
     </div>

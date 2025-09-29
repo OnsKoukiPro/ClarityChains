@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ClientSidebar } from './components/ClientSidebar';
 import { Header } from './components/Header';
 import { PersonalizedDashboard } from './components/PersonalizedDashboard';
-import { ClarityChainsWelcomeCheck } from './components/ClarityChainsWelcomeCheck';
+import { ClarityChainWelcomeCheck } from './components/ClarityChainWelcomeCheck';
 import { ExplorerModule } from './components/modules/ExplorerModule';
 import { TrendsModule } from './components/modules/TrendsModule';
 import { CreativeModule } from './components/modules/CreativeModule';
@@ -116,7 +116,7 @@ export default function ClientApp() {
     };
 
     return moduleMap[moduleId as keyof typeof moduleMap] || {
-      title: 'ClarityChains Intelligence',
+      title: 'ClarityChain Intelligence',
       subtitle: 'Your app intelligence platform'
     };
   };
@@ -143,7 +143,7 @@ export default function ClientApp() {
 
   if (!hasCompletedWelcome) {
     return (
-      <ClarityChainsWelcomeCheck
+      <ClarityChainWelcomeCheck
         onComplete={handleWelcomeComplete}
         onSetAppContext={setAppContext}
       />
