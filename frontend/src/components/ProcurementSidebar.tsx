@@ -33,13 +33,48 @@ export default function ProcurementSidebar({
   onNavigate,
 }: ProcurementSidebarProps) {
   const menuItems = [
-    { id: "dashboard", label: "RFX Dashboard", icon: LayoutDashboard, description: "Manage all RFX projects" },
-    { id: "upload", label: "Upload Offers", icon: Upload, description: "Upload supplier offers" },
-    { id: "processing", label: "Processing", icon: FileText, description: "File ingestion status" },
-    { id: "review", label: "Line Item Review", icon: CheckSquare, description: "Review extracted data" },
-    { id: "analysis", label: "Analysis Results", icon: BarChart3, description: "Comprehensive analysis" },
-    { id: "report", label: "Executive Report", icon: FileBarChart, description: "Generate final report" },
-    { id: "recommendation", label: "Recommendations", icon: Users, description: "Supplier recommendations" },
+    {
+      id: "dashboard",
+      label: "RFX Dashboard",
+      icon: LayoutDashboard,
+      description: "Manage all RFX projects",
+    },
+    {
+      id: "upload",
+      label: "Upload Offers",
+      icon: Upload,
+      description: "Upload supplier offers",
+    },
+    {
+      id: "processing",
+      label: "Processing",
+      icon: FileText,
+      description: "File ingestion status",
+    },
+    {
+      id: "review",
+      label: "Line Item Review",
+      icon: CheckSquare,
+      description: "Review extracted data",
+    },
+    {
+      id: "analysis",
+      label: "Analysis Results",
+      icon: BarChart3,
+      description: "Comprehensive analysis",
+    },
+    {
+      id: "report",
+      label: "Executive Report",
+      icon: FileBarChart,
+      description: "Generate final report",
+    },
+    {
+      id: "recommendation",
+      label: "Recommendations",
+      icon: Users,
+      description: "Supplier recommendations",
+    },
   ];
 
   return (
@@ -47,11 +82,17 @@ export default function ProcurementSidebar({
       <SidebarHeader className="p-6">
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-            <span className="text-primary-foreground font-bold">C</span>
+            <span className="text-primary-foreground font-bold">
+              C
+            </span>
           </div>
           <div>
-            <h2 className="font-semibold text-foreground">ClarityChain</h2>
-            <p className="text-sm text-muted-foreground">Procurement Intelligence</p>
+            <h2 className="font-semibold text-foreground">
+              ClarityChains
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Procurement Intelligence
+            </p>
           </div>
         </div>
       </SidebarHeader>
@@ -63,10 +104,10 @@ export default function ProcurementSidebar({
               <SidebarMenuButton
                 onClick={() => onNavigate(item.id)}
                 className={cn(
-                  "w-full flex items-center space-x-4 p-6 min-h-20 rounded-lg transition-colors duration-200 ease-in-out group",
+                  "w-full flex items-center space-x-4 p-6 min-h-20 rounded-lg transition-colors group",
                   currentView === item.id
                     ? "bg-primary text-primary-foreground shadow-sm"
-                    : "text-foreground hover:bg-gray-800 hover:text-white shadow-sm"
+                    : "hover:bg-accent text-foreground",
                 )}
               >
                 <item.icon
@@ -74,17 +115,19 @@ export default function ProcurementSidebar({
                     "w-6 h-6",
                     currentView === item.id
                       ? "text-primary-foreground"
-                      : "text-muted-foreground group-hover:text-accent-foreground"
+                      : "text-muted-foreground group-hover:text-accent-foreground",
                   )}
                 />
                 <div className="flex-1 text-left">
-                  <div className="font-medium text-base">{item.label}</div>
+                  <div className="font-medium text-base">
+                    {item.label}
+                  </div>
                   <div
                     className={cn(
                       "text-sm",
                       currentView === item.id
                         ? "text-primary-foreground/80"
-                        : "text-muted-foreground group-hover:text-accent-foreground/80"
+                        : "text-muted-foreground",
                     )}
                   >
                     {item.description}
@@ -97,14 +140,29 @@ export default function ProcurementSidebar({
       </SidebarContent>
 
       <SidebarFooter className="p-3 space-y-2">
-        <Button variant="ghost" className="w-full justify-start" size="sm">
-          <Bell className="w-4 h-4 mr-2" /> Notifications
+        <Button
+          variant="ghost"
+          className="w-full justify-start"
+          size="sm"
+        >
+          <Bell className="w-4 h-4 mr-2" />
+          Notifications
         </Button>
-        <Button variant="ghost" className="w-full justify-start" size="sm">
-          <Settings className="w-4 h-4 mr-2" /> Settings
+        <Button
+          variant="ghost"
+          className="w-full justify-start"
+          size="sm"
+        >
+          <Settings className="w-4 h-4 mr-2" />
+          Settings
         </Button>
-        <Button variant="ghost" className="w-full justify-start" size="sm">
-          <HelpCircle className="w-4 h-4 mr-2" /> Help & Support
+        <Button
+          variant="ghost"
+          className="w-full justify-start"
+          size="sm"
+        >
+          <HelpCircle className="w-4 h-4 mr-2" />
+          Help & Support
         </Button>
       </SidebarFooter>
     </Sidebar>

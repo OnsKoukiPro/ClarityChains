@@ -60,7 +60,7 @@ const financingMetrics = {
   activeInvestments: 12
 };
 
-const ClarityChainsInvestment = {
+const clarityChainsInvestment = {
   maxAmount: 50000,
   marketingBudget: 35000,
   asoBudget: 10000,
@@ -365,25 +365,25 @@ export function FinancingModule({ subPage, selectedApp, onSubPageChange, appCont
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <span className="text-muted-foreground">Marketing & UA Budget:</span>
-                  <span className="font-semibold text-green-600">Up to ${ClarityChainsInvestment.marketingBudget.toLocaleString()}</span>
+                  <span className="font-semibold text-green-600">Up to ${clarityChainsInvestment.marketingBudget.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-muted-foreground">ASO & Creative Production:</span>
-                  <span className="font-semibold text-green-600">Up to ${ClarityChainsInvestment.asoBudget.toLocaleString()}</span>
+                  <span className="font-semibold text-green-600">Up to ${clarityChainsInvestment.asoBudget.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-muted-foreground">Technical Implementation:</span>
-                  <span className="font-semibold text-green-600">Up to ${ClarityChainsInvestment.techBudget.toLocaleString()}</span>
+                  <span className="font-semibold text-green-600">Up to ${clarityChainsInvestment.techBudget.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-muted-foreground">Profit Share:</span>
-                  <span className="font-semibold text-blue-600">{ClarityChainsInvestment.profitShare}% after cost recovery</span>
+                  <span className="font-semibold text-blue-600">{clarityChainsInvestment.profitShare}% after cost recovery</span>
                 </div>
               </div>
 
               <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-green-600 mb-2">{ClarityChainsInvestment.eligibilityScore}/100</div>
+                  <div className="text-3xl font-bold text-green-600 mb-2">{clarityChainsInvestment.eligibilityScore}/100</div>
                   <p className="text-sm text-green-700 font-medium">Your Eligibility Score</p>
                   <div className="flex items-center justify-center gap-1 mt-2">
                     {[...Array(5)].map((_, i) => (
@@ -495,8 +495,8 @@ export function FinancingModule({ subPage, selectedApp, onSubPageChange, appCont
                     </div>
                     <p className="text-sm text-muted-foreground mb-2">Up to $50K for marketing, ASO, and technical implementation</p>
                     <div className="flex justify-between text-sm">
-                      <span>Estimated ROI: {ClarityChainsInvestment.estimatedRoi}%</span>
-                      <span>Payback: {ClarityChainsInvestment.paybackPeriod}</span>
+                      <span>Estimated ROI: {clarityChainsInvestment.estimatedRoi}%</span>
+                      <span>Payback: {clarityChainsInvestment.paybackPeriod}</span>
                     </div>
                   </div>
 

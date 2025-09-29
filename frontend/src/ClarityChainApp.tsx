@@ -41,8 +41,10 @@ export default function ClarityChainApp() {
         <ProcurementSidebar currentView={currentView} onNavigate={setCurrentView} />
         <div className="flex-1 flex flex-col">
           <ProcurementHeader />
-          <main className="flex-1 p-6">
-            {renderCurrentView()}
+          <main className="flex-1 w-full">
+            <div className="w-full max-w-none p-6">
+              {renderCurrentView()}
+            </div>
           </main>
         </div>
       </div>
