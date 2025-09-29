@@ -3,14 +3,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Progress } from '../ui/progress';
-import { 
-  Upload, 
-  FileText, 
-  Image, 
-  Archive, 
-  Mail, 
-  CheckCircle, 
-  AlertCircle, 
+import {
+  Upload,
+  FileText,
+  Image,
+  Archive,
+  Mail,
+  CheckCircle,
+  AlertCircle,
   X,
   Download,
   Eye
@@ -67,7 +67,7 @@ export default function OfferUpload({ selectedRFX, onNavigate }: OfferUploadProp
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-    
+
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       // Handle file upload logic here
       console.log(e.dataTransfer.files);
@@ -105,7 +105,7 @@ export default function OfferUpload({ selectedRFX, onNavigate }: OfferUploadProp
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="min-w-0 p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -132,8 +132,8 @@ export default function OfferUpload({ selectedRFX, onNavigate }: OfferUploadProp
         <CardContent>
           <div
             className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
-              dragActive 
-                ? 'border-primary bg-primary/5' 
+              dragActive
+                ? 'border-primary bg-primary/5'
                 : 'border-border hover:border-primary/50'
             }`}
             onDragEnter={handleDrag}
@@ -149,7 +149,7 @@ export default function OfferUpload({ selectedRFX, onNavigate }: OfferUploadProp
             <Button>
               Choose Files
             </Button>
-            
+
             <div className="mt-6 text-sm text-muted-foreground">
               <p className="mb-2">Supported file types:</p>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
@@ -201,7 +201,7 @@ export default function OfferUpload({ selectedRFX, onNavigate }: OfferUploadProp
                     )}
                   </div>
                 </div>
-                
+
                 <div className="flex items-center space-x-2">
                   <Button variant="ghost" size="sm">
                     <Eye className="w-4 h-4" />
@@ -280,7 +280,7 @@ export default function OfferUpload({ selectedRFX, onNavigate }: OfferUploadProp
                 </p>
               </div>
             </div>
-            
+
             <div className="flex items-start space-x-3">
               <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-sm font-medium">2</div>
               <div>
@@ -290,7 +290,7 @@ export default function OfferUpload({ selectedRFX, onNavigate }: OfferUploadProp
                 </p>
               </div>
             </div>
-            
+
             <div className="flex items-start space-x-3">
               <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-sm font-medium">3</div>
               <div>

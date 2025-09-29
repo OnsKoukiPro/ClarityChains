@@ -3,13 +3,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Progress } from '../ui/progress';
-import { 
-  FileText, 
-  CheckCircle, 
-  AlertCircle, 
-  Clock, 
-  Zap, 
-  Database, 
+import {
+  FileText,
+  CheckCircle,
+  AlertCircle,
+  Clock,
+  Zap,
+  Database,
   Search,
   BarChart3,
   Eye,
@@ -116,7 +116,7 @@ export default function FileProcessing({ onNavigate }: FileProcessingProps) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="min-w-0 p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -127,7 +127,7 @@ export default function FileProcessing({ onNavigate }: FileProcessingProps) {
           <Button variant="outline" onClick={() => onNavigate('upload')}>
             Back to Upload
           </Button>
-          <Button 
+          <Button
             onClick={() => onNavigate('review')}
             disabled={overallProgress < 100}
           >
@@ -150,7 +150,7 @@ export default function FileProcessing({ onNavigate }: FileProcessingProps) {
             </div>
           </div>
           <Progress value={overallProgress} className="h-3" />
-          
+
           {overallProgress < 100 && (
             <div className="flex items-center justify-center mt-4 text-sm text-muted-foreground">
               <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
@@ -172,15 +172,15 @@ export default function FileProcessing({ onNavigate }: FileProcessingProps) {
                 <div className="flex-shrink-0 mt-1">
                   {getStageIcon(stage.status)}
                 </div>
-                
+
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="font-medium">{stage.title}</h4>
-                    <Badge 
+                    <Badge
                       variant={stage.status === 'completed' ? 'default' : 'secondary'}
                       className={
-                        stage.status === 'completed' 
-                          ? 'bg-green-100 text-green-800' 
+                        stage.status === 'completed'
+                          ? 'bg-green-100 text-green-800'
                           : stage.status === 'processing'
                           ? 'bg-blue-100 text-blue-800'
                           : 'bg-gray-100 text-gray-800'
@@ -189,9 +189,9 @@ export default function FileProcessing({ onNavigate }: FileProcessingProps) {
                       {stage.status}
                     </Badge>
                   </div>
-                  
+
                   <p className="text-sm text-muted-foreground mb-3">{stage.description}</p>
-                  
+
                   {stage.status !== 'pending' && (
                     <div className="mb-3">
                       <div className="flex items-center justify-between text-sm mb-1">
@@ -201,7 +201,7 @@ export default function FileProcessing({ onNavigate }: FileProcessingProps) {
                       <Progress value={stage.progress} className="h-2" />
                     </div>
                   )}
-                  
+
                   <div className="space-y-1">
                     {stage.details.map((detail, detailIndex) => (
                       <div key={detailIndex} className="flex items-center text-sm text-muted-foreground">
@@ -231,9 +231,9 @@ export default function FileProcessing({ onNavigate }: FileProcessingProps) {
               <div key={index} className="border border-border rounded-lg p-4">
                 <div className="flex items-center justify-between mb-3">
                   <h4 className="font-medium">{data.supplier}</h4>
-                  <Badge 
+                  <Badge
                     className={
-                      data.status === 'completed' 
+                      data.status === 'completed'
                         ? 'bg-green-100 text-green-800'
                         : 'bg-blue-100 text-blue-800'
                     }
@@ -241,7 +241,7 @@ export default function FileProcessing({ onNavigate }: FileProcessingProps) {
                     {data.status}
                   </Badge>
                 </div>
-                
+
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Line Items:</span>

@@ -4,12 +4,12 @@ import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Textarea } from '../ui/textarea';
 import { Input } from '../ui/input';
-import { 
-  FileText, 
-  Download, 
-  Edit2, 
-  Save, 
-  Eye, 
+import {
+  FileText,
+  Download,
+  Edit2,
+  Save,
+  Eye,
   Mail,
   Printer,
   Share,
@@ -142,7 +142,7 @@ Key findings include significant price variations across suppliers (up to 45% fo
   };
 
   return (
-    <div className="space-y-6">
+    <div className="min-w-0 p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -165,7 +165,7 @@ Key findings include significant price variations across suppliers (up to 45% fo
         <CardContent className="p-6">
           <div className="flex items-start justify-between mb-4">
             <div className="flex-1">
-              <Input 
+              <Input
                 value={reportTitle}
                 onChange={(e) => setReportTitle(e.target.value)}
                 className="text-xl font-semibold border-none p-0 bg-transparent"
@@ -219,12 +219,12 @@ Key findings include significant price variations across suppliers (up to 45% fo
         <CardContent>
           <div className="space-y-4">
             <p className="text-foreground leading-relaxed">{executiveSummary}</p>
-            
+
             <div className="border-l-4 border-primary pl-4">
               <p className="font-medium text-primary">Recommendation Summary:</p>
               <p className="text-sm text-muted-foreground mt-1">
-                Award primary contract to <strong>{reportData.recommendedSupplier}</strong> for ${reportData.totalValue} 
-                with potential for {reportData.savingsPercentage} cost reduction. Consider {reportData.alternativeSupplier} 
+                Award primary contract to <strong>{reportData.recommendedSupplier}</strong> for ${reportData.totalValue}
+                with potential for {reportData.savingsPercentage} cost reduction. Consider {reportData.alternativeSupplier}
                 as backup supplier for risk mitigation.
               </p>
             </div>
@@ -385,17 +385,17 @@ Key findings include significant price variations across suppliers (up to 45% fo
               <FileText className="w-6 h-6 mb-2" />
               <span>Word Document</span>
             </Button>
-            
+
             <Button variant="outline" className="h-20 flex flex-col items-center justify-center">
               <Printer className="w-6 h-6 mb-2" />
               <span>PDF Report</span>
             </Button>
-            
+
             <Button variant="outline" className="h-20 flex flex-col items-center justify-center">
               <Mail className="w-6 h-6 mb-2" />
               <span>Email Report</span>
             </Button>
-            
+
             <Button variant="outline" className="h-20 flex flex-col items-center justify-center">
               <Share className="w-6 h-6 mb-2" />
               <span>Share Link</span>
