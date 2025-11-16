@@ -13,18 +13,21 @@ export default function ProcurementHeader({ onNavigate }: ProcurementHeaderProps
   return (
     <header className="border-b border-border bg-background px-6 py-4">
       <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <div className="relative flex-1 max-w-lg">
+        <div className="flex items-center space-x-4 flex-1">
+          <div className="relative flex-1 max-w-xl mr-6">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
               placeholder="Search RFX, suppliers, or projects..."
-              className="pl-10 bg-background"
+              className="pl-10 pr-10 bg-background w-full border border-gray-200 focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-colors"
             />
+            <Button
+              variant="ghost"
+              size="sm"
+              className="absolute right-1 top-1/2 transform -translate-y-1/2 h-7 w-7 p-0"
+            >
+              <Filter className="w-4 h-4" />
+            </Button>
           </div>
-          <Button variant="outline" size="sm">
-            <Filter className="w-4 h-4 mr-2" />
-            Filter
-          </Button>
         </div>
 
         <div className="flex items-center space-x-4">
@@ -32,7 +35,7 @@ export default function ProcurementHeader({ onNavigate }: ProcurementHeaderProps
             <Plus className="w-4 h-4 mr-2" />
             New RFX
           </Button>
-          
+
           <Button variant="outline" size="sm">
             <Download className="w-4 h-4 mr-2" />
             Export
