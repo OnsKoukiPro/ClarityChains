@@ -37,6 +37,7 @@ export default function ClareAssistant({ onNavigate }: ClareAssistantProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -226,7 +227,7 @@ export default function ClareAssistant({ onNavigate }: ClareAssistantProps) {
             className="fixed bottom-6 right-6 z-[9999] w-96"
             style={{ height: isMinimized ? 'auto' : '600px' }}
           >
-            <Card className="h-full flex flex-col border bg-background shadow-2xl">
+            <Card className="h-full flex flex-col border bg-background shadow-2xl overflow-hidden">
               {/* Header - Always visible */}
               <div className="flex-shrink-0 bg-primary p-4 flex items-center justify-between rounded-t-lg">
                 <div className="flex items-center gap-3">
@@ -263,73 +264,76 @@ export default function ClareAssistant({ onNavigate }: ClareAssistantProps) {
               {/* Messages - Only show when not minimized */}
               {!isMinimized && (
                 <>
-                  <ScrollArea className="flex-1 p-4 bg-background">
-                    <div className="space-y-4">
-                      {messages.map((message) => (
-                        <div
-                          key={message.id}
-                          className={`flex gap-2 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                        >
-                          {message.role === 'assistant' && (
+                  {/* Scroll Area with fixed height */}
+                  <div className="flex-1 min-h-0 overflow-hidden">
+                    <ScrollArea className="h-full" ref={scrollAreaRef}>
+                      <div className="p-4 space-y-4">
+                        {messages.map((message) => (
+                          <div
+                            key={message.id}
+                            className={`flex gap-2 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                          >
+                            {message.role === 'assistant' && (
+                              <Avatar className="w-7 h-7 flex-shrink-0">
+                                <div className="w-full h-full bg-primary flex items-center justify-center">
+                                  <Sparkles className="w-3.5 h-3.5 text-primary-foreground" />
+                                </div>
+                              </Avatar>
+                            )}
+                            <div className={`max-w-[75%] ${message.role === 'user' ? 'order-first' : ''}`}>
+                              {message.files && message.files.length > 0 && (
+                                <div className="flex flex-wrap gap-2 mb-2">
+                                  {message.files.map((file, index) => (
+                                    <Badge key={index} variant="secondary" className="gap-1.5 px-2 py-1">
+                                      {getFileIcon(file)}
+                                      <span className="text-xs max-w-[100px] truncate">{file.name}</span>
+                                    </Badge>
+                                  ))}
+                                </div>
+                              )}
+                              <div
+                                className={`px-3 py-2 rounded-2xl text-sm ${
+                                  message.role === 'user'
+                                    ? 'bg-primary text-primary-foreground rounded-tr-sm'
+                                    : 'bg-muted rounded-tl-sm'
+                                }`}
+                              >
+                                <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
+                              </div>
+                              <p className="text-[10px] text-muted-foreground mt-1 px-2">
+                                {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                              </p>
+                            </div>
+                            {message.role === 'user' && (
+                              <Avatar className="w-7 h-7 flex-shrink-0">
+                                <div className="w-full h-full bg-slate-600 flex items-center justify-center text-white text-[10px]">
+                                  You
+                                </div>
+                              </Avatar>
+                            )}
+                          </div>
+                        ))}
+
+                        {isTyping && (
+                          <div className="flex gap-2 justify-start">
                             <Avatar className="w-7 h-7 flex-shrink-0">
                               <div className="w-full h-full bg-primary flex items-center justify-center">
                                 <Sparkles className="w-3.5 h-3.5 text-primary-foreground" />
                               </div>
                             </Avatar>
-                          )}
-                          <div className={`max-w-[75%] ${message.role === 'user' ? 'order-first' : ''}`}>
-                            {message.files && message.files.length > 0 && (
-                              <div className="flex flex-wrap gap-2 mb-2">
-                                {message.files.map((file, index) => (
-                                  <Badge key={index} variant="secondary" className="gap-1.5 px-2 py-1">
-                                    {getFileIcon(file)}
-                                    <span className="text-xs max-w-[100px] truncate">{file.name}</span>
-                                  </Badge>
-                                ))}
+                            <div className="bg-muted px-3 py-2 rounded-2xl rounded-tl-sm">
+                              <div className="flex gap-1">
+                                <div className="w-1.5 h-1.5 rounded-full bg-muted-foreground/50 animate-bounce" style={{ animationDelay: '0ms' }} />
+                                <div className="w-1.5 h-1.5 rounded-full bg-muted-foreground/50 animate-bounce" style={{ animationDelay: '150ms' }} />
+                                <div className="w-1.5 h-1.5 rounded-full bg-muted-foreground/50 animate-bounce" style={{ animationDelay: '300ms' }} />
                               </div>
-                            )}
-                            <div
-                              className={`px-3 py-2 rounded-2xl text-sm ${
-                                message.role === 'user'
-                                  ? 'bg-primary text-primary-foreground rounded-tr-sm'
-                                  : 'bg-muted rounded-tl-sm'
-                              }`}
-                            >
-                              <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
-                            </div>
-                            <p className="text-[10px] text-muted-foreground mt-1 px-2">
-                              {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                            </p>
-                          </div>
-                          {message.role === 'user' && (
-                            <Avatar className="w-7 h-7 flex-shrink-0">
-                              <div className="w-full h-full bg-slate-600 flex items-center justify-center text-white text-[10px]">
-                                You
-                              </div>
-                            </Avatar>
-                          )}
-                        </div>
-                      ))}
-
-                      {isTyping && (
-                        <div className="flex gap-2 justify-start">
-                          <Avatar className="w-7 h-7 flex-shrink-0">
-                            <div className="w-full h-full bg-primary flex items-center justify-center">
-                              <Sparkles className="w-3.5 h-3.5 text-primary-foreground" />
-                            </div>
-                          </Avatar>
-                          <div className="bg-muted px-3 py-2 rounded-2xl rounded-tl-sm">
-                            <div className="flex gap-1">
-                              <div className="w-1.5 h-1.5 rounded-full bg-muted-foreground/50 animate-bounce" style={{ animationDelay: '0ms' }} />
-                              <div className="w-1.5 h-1.5 rounded-full bg-muted-foreground/50 animate-bounce" style={{ animationDelay: '150ms' }} />
-                              <div className="w-1.5 h-1.5 rounded-full bg-muted-foreground/50 animate-bounce" style={{ animationDelay: '300ms' }} />
                             </div>
                           </div>
-                        </div>
-                      )}
-                      <div ref={messagesEndRef} />
-                    </div>
-                  </ScrollArea>
+                        )}
+                        <div ref={messagesEndRef} />
+                      </div>
+                    </ScrollArea>
+                  </div>
 
                   {/* Input - Always at bottom */}
                   <div className="flex-shrink-0 p-4 border-t bg-background">
