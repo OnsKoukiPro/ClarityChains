@@ -1,6 +1,7 @@
 import React from "react";
 import { cn } from "./ui/utils";
 import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
 import {
   Sidebar,
   SidebarContent,
@@ -21,6 +22,7 @@ import {
   Settings,
   Bell,
   HelpCircle,
+  Sparkles,
 } from "lucide-react";
 
 // Import your logo
@@ -36,6 +38,13 @@ export default function ProcurementSidebar({
   onNavigate,
 }: ProcurementSidebarProps) {
   const menuItems = [
+    {
+      id: "conversational",
+      label: "Clare AI ",
+      icon: Sparkles,
+      description: "AI procurement assistant",
+      badge: "AI",
+    },
     {
       id: "dashboard",
       label: "RFX Dashboard",
@@ -127,6 +136,11 @@ export default function ProcurementSidebar({
                 <div className="flex-1 text-left">
                   <div className="font-medium text-base">
                     {item.label}
+                    {item.badge && (
+                      <Badge variant="secondary" className="h-5 px-1.5 text-[10px]">
+                        {item.badge}
+                      </Badge>
+                    )}
                   </div>
                   <div
                     className={cn(

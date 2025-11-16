@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { SidebarProvider } from './components/ui/sidebar';
 import ProcurementSidebar from './components/ProcurementSidebar';
 import ProcurementHeader from './components/ProcurementHeader';
+import ClareAIInterface from './components/ClareAIInterface';
+import ClareAssistant from './components/ClareAssistant';
 import RFXDashboard from './components/procurement/RFXDashboard';
 import OfferUpload from './components/procurement/OfferUpload';
 import FileProcessing from './components/procurement/FileProcessing';
@@ -12,11 +14,13 @@ import SupplierRecommendation from './components/procurement/SupplierRecommendat
 import RFXCreation from './components/procurement/RFXCreation';
 
 export default function ClarityChainApp() {
-  const [currentView, setCurrentView] = useState('dashboard');
+  const [currentView, setCurrentView] = useState('conversational');
   const [selectedRFX, setSelectedRFX] = useState(null);
 
   const renderCurrentView = () => {
     switch (currentView) {
+      case 'conversational':
+        return <ClareAIInterface onNavigate={setCurrentView} />;
       case 'dashboard':
         return <RFXDashboard onSelectRFX={setSelectedRFX} onNavigate={setCurrentView} />;
       case 'upload':
@@ -34,7 +38,7 @@ export default function ClarityChainApp() {
       case 'create-rfx':
         return <RFXCreation onNavigate={setCurrentView} />;
       default:
-        return <RFXDashboard onSelectRFX={setSelectedRFX} onNavigate={setCurrentView} />;
+        return <ClareAIInterface onNavigate={setCurrentView} />;
     }
   };
 
@@ -52,6 +56,9 @@ export default function ClarityChainApp() {
             {renderCurrentView()}
           </main>
         </div>
+
+        {/* Clare AI Assistant - Only show on non-conversational views */}
+        {currentView !== 'conversational' && <ClareAssistant onNavigate={setCurrentView} />}
       </div>
     </SidebarProvider>
   );
