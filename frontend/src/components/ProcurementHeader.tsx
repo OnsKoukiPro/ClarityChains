@@ -3,7 +3,7 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Badge } from './ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { Bell, Search, Plus, Filter, Download } from 'lucide-react';
+import { Bell, Search, Plus, Filter, Download, MessageSquare } from 'lucide-react';
 
 interface ProcurementHeaderProps {
   onNavigate?: (view: string) => void;
@@ -14,7 +14,7 @@ export default function ProcurementHeader({ onNavigate }: ProcurementHeaderProps
     <header className="border-b border-border bg-background px-6 py-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4 flex-1">
-          <div className="relative flex-1 max-w-xl mr-6">
+          <div className="relative flex-1 max-w-xl">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
               placeholder="Search RFX, suppliers, or projects..."
@@ -30,7 +30,12 @@ export default function ProcurementHeader({ onNavigate }: ProcurementHeaderProps
           </div>
         </div>
 
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 ml-8">
+          <Button size="sm" onClick={() => onNavigate?.('conversational')} variant="outline">
+            <MessageSquare className="w-4 h-4 mr-2" />
+            Clare AI
+          </Button>
+
           <Button size="sm" onClick={() => onNavigate?.('create-rfx')}>
             <Plus className="w-4 h-4 mr-2" />
             New RFX
