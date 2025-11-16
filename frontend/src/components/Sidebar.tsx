@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import {
-  Home,
-  Search,
-  TrendingUp,
-  Palette,
-  Type,
-  DollarSign,
-  MessageSquare,
-  Globe,
-  Settings,
-  Lightbulb,
+import { 
+  Home, 
+  Search, 
+  TrendingUp, 
+  Palette, 
+  Type, 
+  DollarSign, 
+  MessageSquare, 
+  Globe, 
+  Settings, 
+  Lightbulb, 
   Bot,
   BarChart3,
   ChevronDown,
@@ -96,8 +96,8 @@ export function Sidebar({ activeModule, onModuleChange }: SidebarProps) {
   const [collapsedGroups, setCollapsedGroups] = useState<string[]>([]);
 
   const toggleGroup = (groupTitle: string) => {
-    setCollapsedGroups(prev =>
-      prev.includes(groupTitle)
+    setCollapsedGroups(prev => 
+      prev.includes(groupTitle) 
         ? prev.filter(g => g !== groupTitle)
         : [...prev, groupTitle]
     );
@@ -114,11 +114,11 @@ export function Sidebar({ activeModule, onModuleChange }: SidebarProps) {
             <span className="text-sidebar-primary-foreground font-semibold">K</span>
           </div>
           <div>
-            <h1 className="font-semibold text-sidebar-foreground">ClarityChain</h1>
+            <h1 className="font-semibold text-sidebar-foreground">Karbon</h1>
             <p className="text-xs text-sidebar-foreground/60">Admin</p>
           </div>
         </div>
-
+        
         <div className="bg-sidebar-accent rounded-lg p-3">
           <div className="flex items-center justify-between mb-1">
             <span className="font-medium text-sm text-sidebar-accent-foreground">Enterprise Platform</span>
@@ -147,7 +147,7 @@ export function Sidebar({ activeModule, onModuleChange }: SidebarProps) {
                 <ChevronDown className="w-3 h-3" />
               )}
             </button>
-
+            
             {!isGroupCollapsed(group.title) && (
               <div className="mt-2 space-y-1">
                 {group.modules.map((module) => (
@@ -155,8 +155,8 @@ export function Sidebar({ activeModule, onModuleChange }: SidebarProps) {
                     key={module.id}
                     variant={activeModule === module.id ? "default" : "ghost"}
                     className={`w-full justify-start gap-3 ${
-                      activeModule === module.id
-                        ? 'bg-sidebar-primary text-sidebar-primary-foreground'
+                      activeModule === module.id 
+                        ? 'bg-sidebar-primary text-sidebar-primary-foreground' 
                         : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
                     }`}
                     onClick={() => onModuleChange(module.id)}
@@ -164,10 +164,10 @@ export function Sidebar({ activeModule, onModuleChange }: SidebarProps) {
                     <module.icon className="w-4 h-4" />
                     <span>{module.label}</span>
                     {module.badge && (
-                      <Badge
-                        variant="secondary"
+                      <Badge 
+                        variant="secondary" 
                         className={`ml-auto text-xs h-5 px-1.5 ${
-                          module.badge === 'Core' ? 'bg-yellow-100 text-yellow-800' :
+                          module.badge === 'Core' ? 'bg-yellow-100 text-yellow-800' : 
                           module.badge === 'Executive' ? 'bg-purple-100 text-purple-800' :
                           module.badge === 'New' ? 'bg-green-100 text-green-800' :
                           module.badge === 'AI' ? 'bg-blue-100 text-blue-800' :

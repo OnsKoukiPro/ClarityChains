@@ -5,12 +5,12 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Badge } from './ui/badge';
 import { Progress } from './ui/progress';
-import {
-  Smartphone,
-  Globe,
-  Search,
-  CheckCircle,
-  ArrowRight,
+import { 
+  Smartphone, 
+  Globe, 
+  Search, 
+  CheckCircle, 
+  ArrowRight, 
   Upload,
   Link,
   Home,
@@ -55,7 +55,7 @@ export function LoginFlow({ onComplete }: LoginFlowProps) {
 
   const handleAnalyzeApp = async () => {
     setIsAnalyzing(true);
-
+    
     // Simulate app analysis based on URL
     setTimeout(() => {
       // Mock data for home decoration app
@@ -73,7 +73,7 @@ export function LoginFlow({ onComplete }: LoginFlowProps) {
         rating: 4.3,
         reviews: 2847
       };
-
+      
       setDetectedApp(mockAppData);
       setSelectedCategory('lifestyle');
       setSelectedSubcategory('Interior Design');
@@ -116,7 +116,7 @@ export function LoginFlow({ onComplete }: LoginFlowProps) {
           <div className="w-16 h-16 bg-primary rounded-xl flex items-center justify-center mx-auto mb-4">
             <span className="text-primary-foreground font-semibold text-xl">K</span>
           </div>
-          <h1 className="text-3xl font-semibold mb-2">Welcome to ClarityChain</h1>
+          <h1 className="text-3xl font-semibold mb-2">Welcome to Karbon</h1>
           <p className="text-muted-foreground text-lg">AI Intelligence Platform for App Developers</p>
         </div>
 
@@ -151,7 +151,7 @@ export function LoginFlow({ onComplete }: LoginFlowProps) {
                       className="mt-1"
                     />
                   </div>
-
+                  
                   <div>
                     <Label htmlFor="playstore-url">Google Play URL (Optional)</Label>
                     <Input
@@ -174,7 +174,7 @@ export function LoginFlow({ onComplete }: LoginFlowProps) {
                   </ul>
                 </div>
 
-                <Button
+                <Button 
                   onClick={handleAnalyzeApp}
                   disabled={!appStoreUrl || isAnalyzing}
                   className="w-full"
@@ -205,7 +205,7 @@ export function LoginFlow({ onComplete }: LoginFlowProps) {
                     </div>
                     <Badge variant="secondary">{detectedApp.category}</Badge>
                   </div>
-
+                  
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                     <div>
                       <p className="text-sm text-muted-foreground">Monthly Downloads</p>
@@ -237,8 +237,8 @@ export function LoginFlow({ onComplete }: LoginFlowProps) {
                         key={category.id}
                         onClick={() => setSelectedCategory(category.id)}
                         className={`p-3 border rounded-lg text-left transition-all ${
-                          selectedCategory === category.id
-                            ? 'border-primary bg-primary/5'
+                          selectedCategory === category.id 
+                            ? 'border-primary bg-primary/5' 
                             : 'border-border hover:border-primary/50'
                         }`}
                       >
@@ -285,7 +285,7 @@ export function LoginFlow({ onComplete }: LoginFlowProps) {
                   </div>
                 </div>
 
-                <Button
+                <Button 
                   onClick={handleConfirmApp}
                   className="w-full"
                   size="lg"
