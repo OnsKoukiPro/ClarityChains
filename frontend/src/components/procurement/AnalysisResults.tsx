@@ -4,130 +4,117 @@ import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Progress } from '../ui/progress';
-import { 
-  TrendingDown, 
-  TrendingUp, 
-  AlertTriangle, 
-  CheckCircle, 
-  DollarSign, 
-  Clock, 
-  Shield, 
+import {
+  TrendingDown,
+  TrendingUp,
+  AlertTriangle,
+  CheckCircle,
+  DollarSign,
+  Clock,
+  Shield,
   Truck,
   FileBarChart,
   Eye,
   Download,
-  Star
+  Star,
+  FileText,
+  BarChart3,
+  Users,
+  Flag
 } from 'lucide-react';
 
 interface AnalysisResultsProps {
   onNavigate: (view: string) => void;
+  analysisData?: any; // Data from the agent analysis
 }
 
-export default function AnalysisResults({ onNavigate }: AnalysisResultsProps) {
+export default function AnalysisResults({ onNavigate, analysisData }: AnalysisResultsProps) {
   const [selectedAnalysis, setSelectedAnalysis] = useState('overview');
 
-  const analysisResults = {
-    totalValue: '$4,970,000',
-    potentialSavings: '$487,000',
-    savingsPercentage: 9.8,
-    recommendedSupplier: 'Global Supply Co',
-    riskScore: 'Medium',
-    averageLeadTime: '2.5 weeks'
+  // Use actual analysis data or fallback to mock data
+  const actualData = analysisData || {
+    offers_analyzed: 1,
+    analysis_data: [
+      {
+        offer_name: "Offer 1",
+        supplier_name: "OneSubsea",
+        summary_metrics: {
+          "Total Price": "N/A",
+          "Lead Time": "N/A",
+          "Payment Terms": "N/A"
+        },
+        risk: {
+          total_risk_score: 4.2,
+          risk_level: "High",
+          dimension_scores: {
+            "Delivery Risk": 4.5,
+            "Financial Risk": 3.5,
+            "Technical Risk": 4.5,
+            "Quality Risk": 4.0,
+            "HSE / Compliance Risk": 4.5,
+            "Geopolitical / Supply Risk": 3.5,
+            "ESG / Reputation Risk": 4.0
+          }
+        },
+        recommendation: "Best Offer",
+        total_weighted_score: 16
+      }
+    ],
+    comparison_summary: {
+      comparison_summary: {
+        comparison_table: [],
+        ai_insights: "No analysis data available.",
+        action_list: []
+      }
+    }
   };
 
-  const supplierComparison = [
-    {
-      name: 'Global Supply Co',
-      totalCost: '$4,483,000',
-      landedCost: '$4,625,000',
-      savings: '$487,000',
-      leadTime: '2.8 weeks',
-      riskScore: 85,
-      compliance: 'Full',
-      recommended: true
-    },
-    {
-      name: 'TechCorp Industries',
-      totalCost: '$4,970,000',
-      landedCost: '$5,112,000',
-      savings: '$0',
-      leadTime: '2.1 weeks',
-      riskScore: 92,
-      compliance: 'Full',
-      recommended: false
-    },
-    {
-      name: 'Premier Solutions',
-      totalCost: '$5,240,000',
-      landedCost: '$5,387,000',
-      savings: '-$417,000',
-      leadTime: '2.6 weeks',
-      riskScore: 78,
-      compliance: 'Partial',
-      recommended: false
-    }
-  ];
+  const { analysis_data, comparison_summary, offers_analyzed } = actualData;
+  const bestOffer = analysis_data.find((offer: any) => offer.recommendation === "Best Offer");
+  const riskData = bestOffer?.risk;
 
-  const riskAnalysis = [
-    {
-      category: 'Supplier Financial Risk',
-      level: 'Low',
-      score: 85,
-      description: 'All suppliers show strong financial health',
-      color: 'text-green-600'
-    },
-    {
-      category: 'Delivery Risk',
-      level: 'Medium',
-      score: 72,
-      description: 'Some suppliers have longer lead times',
-      color: 'text-orange-600'
-    },
-    {
-      category: 'Compliance Risk',
-      level: 'Low',
-      score: 88,
-      description: 'Most suppliers meet compliance requirements',
-      color: 'text-green-600'
-    },
-    {
-      category: 'Price Volatility',
-      level: 'High',
-      score: 45,
-      description: 'Significant price variations detected',
-      color: 'text-red-600'
-    }
-  ];
+  // Transform data for display
+  const supplierComparison = analysis_data.map((offer: any) => ({
+    name: offer.supplier_name,
+    totalCost: offer.summary_metrics?.["Total Price"] || "N/A",
+    landedCost: offer.summary_metrics?.["Total Price"] || "N/A",
+    savings: "N/A",
+    leadTime: offer.summary_metrics?.["Lead Time"] || "N/A",
+    riskScore: Math.round((offer.risk?.total_risk_score || 0) * 20), // Convert 0-5 to 0-100
+    compliance: offer.risk?.dimension_scores?.["HSE / Compliance Risk"] <= 2.5 ? "Full" :
+                offer.risk?.dimension_scores?.["HSE / Compliance Risk"] <= 3.5 ? "Partial" : "Low",
+    recommended: offer.recommendation === "Best Offer",
+    rawData: offer
+  }));
 
-  const tcoBreakdown = [
-    { category: 'Base Price', amount: '$4,483,000', percentage: 89.2 },
-    { category: 'Freight & Shipping', amount: '$89,600', percentage: 1.8, estimated: true },
-    { category: 'Insurance', amount: '$44,800', percentage: 0.9, estimated: true },
-    { category: 'Duties & Taxes', amount: '$22,400', percentage: 0.5, estimated: true },
-    { category: 'Handling & Processing', amount: '$13,440', percentage: 0.3, estimated: true },
-    { category: 'Currency Risk (3%)', amount: '$134,490', percentage: 2.7, estimated: true }
-  ];
+  const riskAnalysis = riskData ? Object.entries(riskData.dimension_scores || {}).map(([category, score]) => ({
+    category,
+    level: (score as number) <= 1.5 ? "Low" : (score as number) <= 3.5 ? "Medium" : "High",
+    score: Math.round((score as number) * 20), // Convert to 0-100 scale
+    description: getRiskDescription(category, score as number),
+    color: (score as number) <= 1.5 ? "text-green-600" : (score as number) <= 3.5 ? "text-orange-600" : "text-red-600"
+  })) : [];
 
-  const redFlags = [
-    {
-      severity: 'High',
-      issue: 'Premier Solutions missing ISO certification for critical components',
-      impact: 'Compliance risk',
-      recommendation: 'Request certification or exclude from selection'
-    },
-    {
-      severity: 'Medium',
-      issue: 'Price outlier detected: Control Panel prices vary by 45%',
-      impact: 'Potential pricing error',
-      recommendation: 'Verify pricing with suppliers'
-    },
-    {
-      severity: 'Low',
-      issue: 'TechCorp payment terms require 50% upfront',
-      impact: 'Cash flow impact',
-      recommendation: 'Negotiate better payment terms'
-    }
-  ];
+  const redFlags = riskData?.detailed_risk_analysis?.rows?.map((row: any[]) => ({
+    severity: (row[1] as number) <= 1.5 ? "Low" : (row[1] as number) <= 3.5 ? "Medium" : "High",
+    issue: row[2] || "No data available",
+    impact: row[0] || "Unknown risk factor",
+    recommendation: row[3] || "No recommendation available"
+  })) || [];
+
+  const gapAnalysis = bestOffer?.detailed_gap_analysis?.rows?.map((row: any[]) => ({
+    category: row[0] || "Unknown",
+    details: row[1] || "N/A",
+    gap: row[2] || "No gap analysis available"
+  })) || [];
+
+  const actionItems = comparison_summary?.comparison_summary?.action_list || [];
+
+  function getRiskDescription(category: string, score: number): string {
+    if (score <= 1.5) return `Low ${category.toLowerCase()} risk`;
+    if (score <= 3.5) return `Moderate ${category.toLowerCase()} risk`;
+    return `High ${category.toLowerCase()} risk requiring immediate attention`;
+  }
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -138,17 +125,28 @@ export default function AnalysisResults({ onNavigate }: AnalysisResultsProps) {
     }
   };
 
+  const getRiskLevelColor = (level: string) => {
+    switch (level) {
+      case 'Low': return 'bg-green-100 text-green-800';
+      case 'Medium': return 'bg-orange-100 text-orange-800';
+      case 'High': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
   return (
     <div className="min-w-0 p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-foreground">Analysis Results</h1>
-          <p className="text-muted-foreground">Comprehensive analysis of supplier offers and recommendations</p>
+          <p className="text-muted-foreground">
+            {offers_analyzed} offer{offers_analyzed !== 1 ? 's' : ''} analyzed with AI-powered risk assessment
+          </p>
         </div>
         <div className="flex space-x-2">
-          <Button variant="outline" onClick={() => onNavigate('review')}>
-            Back to Review
+          <Button variant="outline" onClick={() => onNavigate('upload')}>
+            Back to Upload
           </Button>
           <Button onClick={() => onNavigate('report')}>
             <FileBarChart className="w-4 h-4 mr-2" />
@@ -163,10 +161,10 @@ export default function AnalysisResults({ onNavigate }: AnalysisResultsProps) {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Total Project Value</p>
-                <p className="text-2xl font-semibold">{analysisResults.totalValue}</p>
+                <p className="text-sm text-muted-foreground">Offers Analyzed</p>
+                <p className="text-2xl font-semibold">{offers_analyzed}</p>
               </div>
-              <DollarSign className="w-8 h-8 text-blue-600" />
+              <FileText className="w-8 h-8 text-blue-600" />
             </div>
           </CardContent>
         </Card>
@@ -175,11 +173,14 @@ export default function AnalysisResults({ onNavigate }: AnalysisResultsProps) {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Potential Savings</p>
-                <p className="text-2xl font-semibold text-green-600">{analysisResults.potentialSavings}</p>
-                <p className="text-xs text-green-600">↓ {analysisResults.savingsPercentage}%</p>
+                <p className="text-sm text-muted-foreground">Overall Risk</p>
+                <p className="text-2xl font-semibold">{riskData?.risk_level || "Unknown"}</p>
+                <p className="text-xs text-muted-foreground">Score: {riskData?.total_risk_score || "N/A"}/5</p>
               </div>
-              <TrendingDown className="w-8 h-8 text-green-600" />
+              <Shield className={`w-8 h-8 ${
+                riskData?.risk_level === "Low" ? "text-green-600" :
+                riskData?.risk_level === "Medium" ? "text-orange-600" : "text-red-600"
+              }`} />
             </div>
           </CardContent>
         </Card>
@@ -188,10 +189,11 @@ export default function AnalysisResults({ onNavigate }: AnalysisResultsProps) {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Avg Lead Time</p>
-                <p className="text-2xl font-semibold">{analysisResults.averageLeadTime}</p>
+                <p className="text-sm text-muted-foreground">Best Offer</p>
+                <p className="text-2xl font-semibold">{bestOffer?.supplier_name || "N/A"}</p>
+                <p className="text-xs text-muted-foreground">Weighted Score: {bestOffer?.total_weighted_score || "N/A"}</p>
               </div>
-              <Clock className="w-8 h-8 text-orange-600" />
+              <Star className="w-8 h-8 text-yellow-600" />
             </div>
           </CardContent>
         </Card>
@@ -200,10 +202,15 @@ export default function AnalysisResults({ onNavigate }: AnalysisResultsProps) {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Risk Level</p>
-                <p className="text-2xl font-semibold">{analysisResults.riskScore}</p>
+                <p className="text-sm text-muted-foreground">Data Quality</p>
+                <p className="text-2xl font-semibold">
+                  {gapAnalysis.filter(gap => gap.details !== "N/A").length > 0 ? "Partial" : "Limited"}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {gapAnalysis.filter(gap => gap.details !== "N/A").length}/{gapAnalysis.length} metrics
+                </p>
               </div>
-              <Shield className="w-8 h-8 text-yellow-600" />
+              <BarChart3 className="w-8 h-8 text-purple-600" />
             </div>
           </CardContent>
         </Card>
@@ -214,21 +221,23 @@ export default function AnalysisResults({ onNavigate }: AnalysisResultsProps) {
         <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="suppliers">Suppliers</TabsTrigger>
-          <TabsTrigger value="tco">TCO Analysis</TabsTrigger>
+          <TabsTrigger value="gaps">Gap Analysis</TabsTrigger>
           <TabsTrigger value="risk">Risk Assessment</TabsTrigger>
-          <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
+          <TabsTrigger value="actions">Action Plan</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
           {/* Supplier Ranking */}
           <Card>
             <CardHeader>
-              <CardTitle>Supplier Ranking</CardTitle>
+              <CardTitle>Supplier Ranking & Analysis</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {supplierComparison.map((supplier, index) => (
-                  <div key={index} className={`p-4 rounded-lg border ${supplier.recommended ? 'border-green-200 bg-green-50' : 'border-border'}`}>
+                  <div key={index} className={`p-4 rounded-lg border ${
+                    supplier.recommended ? 'border-green-200 bg-green-50' : 'border-border'
+                  }`}>
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center space-x-3">
                         <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-semibold">
@@ -241,19 +250,22 @@ export default function AnalysisResults({ onNavigate }: AnalysisResultsProps) {
                             Recommended
                           </Badge>
                         )}
+                        <Badge className={getRiskLevelColor(
+                          supplier.rawData.risk?.risk_level || "Unknown"
+                        )}>
+                          {supplier.rawData.risk?.risk_level || "Unknown"} Risk
+                        </Badge>
                       </div>
                       <div className="text-right">
-                        <p className="font-semibold">{supplier.landedCost}</p>
-                        <p className="text-sm text-muted-foreground">Landed Cost</p>
+                        <p className="font-semibold">Score: {supplier.rawData.total_weighted_score}</p>
+                        <p className="text-sm text-muted-foreground">Weighted Total</p>
                       </div>
                     </div>
-                    
+
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                       <div>
-                        <p className="text-muted-foreground">Savings</p>
-                        <p className={`font-medium ${supplier.savings.startsWith('-') ? 'text-red-600' : supplier.savings === '$0' ? 'text-gray-600' : 'text-green-600'}`}>
-                          {supplier.savings}
-                        </p>
+                        <p className="text-muted-foreground">Total Price</p>
+                        <p className="font-medium">{supplier.totalCost}</p>
                       </div>
                       <div>
                         <p className="text-muted-foreground">Lead Time</p>
@@ -268,18 +280,42 @@ export default function AnalysisResults({ onNavigate }: AnalysisResultsProps) {
                         <p className="font-medium">{supplier.compliance}</p>
                       </div>
                     </div>
+
+                    {/* Risk Summary */}
+                    {supplier.rawData.risk?.summary && (
+                      <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+                        <p className="text-sm text-gray-700">{supplier.rawData.risk.summary}</p>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
             </CardContent>
           </Card>
 
+          {/* AI Insights */}
+          {comparison_summary?.comparison_summary?.ai_insights && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Users className="w-5 h-5 text-blue-600" />
+                  <span>AI Insights & Recommendations</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <p className="text-blue-800">{comparison_summary.comparison_summary.ai_insights}</p>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           {/* Red Flags */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <AlertTriangle className="w-5 h-5 text-orange-600" />
-                <span>Red Flags & Issues</span>
+                <span>Risk Flags & Critical Issues</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -288,7 +324,7 @@ export default function AnalysisResults({ onNavigate }: AnalysisResultsProps) {
                   <div key={index} className="border border-border rounded-lg p-4">
                     <div className="flex items-start justify-between mb-2">
                       <Badge className={getSeverityColor(flag.severity)}>
-                        {flag.severity}
+                        {flag.severity} Risk
                       </Badge>
                       <span className="text-sm text-muted-foreground">{flag.impact}</span>
                     </div>
@@ -312,10 +348,10 @@ export default function AnalysisResults({ onNavigate }: AnalysisResultsProps) {
                   <thead>
                     <tr className="border-b border-border">
                       <th className="text-left py-3 px-4 font-medium">Supplier</th>
-                      <th className="text-right py-3 px-4 font-medium">Base Cost</th>
-                      <th className="text-right py-3 px-4 font-medium">Landed Cost</th>
-                      <th className="text-center py-3 px-4 font-medium">Lead Time</th>
+                      <th className="text-right py-3 px-4 font-medium">Total Price</th>
+                      <th className="text-right py-3 px-4 font-medium">Lead Time</th>
                       <th className="text-center py-3 px-4 font-medium">Risk Score</th>
+                      <th className="text-center py-3 px-4 font-medium">Risk Level</th>
                       <th className="text-center py-3 px-4 font-medium">Status</th>
                     </tr>
                   </thead>
@@ -324,13 +360,17 @@ export default function AnalysisResults({ onNavigate }: AnalysisResultsProps) {
                       <tr key={index} className="border-b border-border/50">
                         <td className="py-3 px-4 font-medium">{supplier.name}</td>
                         <td className="py-3 px-4 text-right">{supplier.totalCost}</td>
-                        <td className="py-3 px-4 text-right font-medium">{supplier.landedCost}</td>
-                        <td className="py-3 px-4 text-center">{supplier.leadTime}</td>
+                        <td className="py-3 px-4 text-right">{supplier.leadTime}</td>
                         <td className="py-3 px-4 text-center">
                           <div className="flex items-center justify-center space-x-2">
                             <span>{supplier.riskScore}</span>
                             <Progress value={supplier.riskScore} className="w-16 h-2" />
                           </div>
+                        </td>
+                        <td className="py-3 px-4 text-center">
+                          <Badge className={getRiskLevelColor(supplier.rawData.risk?.risk_level || "Unknown")}>
+                            {supplier.rawData.risk?.risk_level || "Unknown"}
+                          </Badge>
                         </td>
                         <td className="py-3 px-4 text-center">
                           {supplier.recommended ? (
@@ -348,42 +388,44 @@ export default function AnalysisResults({ onNavigate }: AnalysisResultsProps) {
           </Card>
         </TabsContent>
 
-        <TabsContent value="tco" className="space-y-6">
+        <TabsContent value="gaps" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Total Cost of Ownership Breakdown</CardTitle>
+              <CardTitle>Data Gap Analysis</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {tcoBreakdown.map((item, index) => (
+                {gapAnalysis.map((item, index) => (
                   <div key={index} className="flex items-center justify-between p-3 border border-border rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <span className="font-medium">{item.category}</span>
-                      {item.estimated && (
-                        <Badge variant="outline" className="text-xs">Estimated</Badge>
-                      )}
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-3 mb-2">
+                        <span className="font-medium">{item.category}</span>
+                        {item.details === "N/A" && (
+                          <Badge variant="outline" className="text-xs bg-red-50 text-red-700">Missing Data</Badge>
+                        )}
+                      </div>
+                      <p className="text-sm text-muted-foreground">{item.gap}</p>
                     </div>
-                    <div className="flex items-center space-x-4">
-                      <div className="text-right">
-                        <p className="font-medium">{item.amount}</p>
-                        <p className="text-xs text-muted-foreground">{item.percentage}%</p>
-                      </div>
-                      <div className="w-24">
-                        <Progress value={item.percentage} className="h-2" />
-                      </div>
+                    <div className="text-right ml-4">
+                      <p className={`font-medium ${
+                        item.details === "N/A" ? "text-red-600" : "text-green-600"
+                      }`}>
+                        {item.details}
+                      </p>
+                      <p className="text-xs text-muted-foreground">Current Value</p>
                     </div>
                   </div>
                 ))}
               </div>
-              
-              <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+
+              <div className="mt-6 p-4 bg-orange-50 rounded-lg">
                 <div className="flex items-center space-x-2 mb-2">
-                  <AlertTriangle className="w-4 h-4 text-blue-600" />
-                  <span className="font-medium text-blue-800">Cost Estimation Note</span>
+                  <Flag className="w-4 h-4 text-orange-600" />
+                  <span className="font-medium text-orange-800">Data Quality Alert</span>
                 </div>
-                <p className="text-sm text-blue-700">
-                  Freight, insurance, and handling costs are estimated based on location, weight, and industry standards. 
-                  Please verify these costs with suppliers for accurate TCO calculation.
+                <p className="text-sm text-orange-700">
+                  Multiple data gaps detected. The analysis is limited by missing critical information from supplier documents.
+                  Consider requesting complete documentation for more accurate assessment.
                 </p>
               </div>
             </CardContent>
@@ -393,7 +435,7 @@ export default function AnalysisResults({ onNavigate }: AnalysisResultsProps) {
         <TabsContent value="risk" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Risk Assessment</CardTitle>
+              <CardTitle>Detailed Risk Assessment</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
@@ -401,11 +443,7 @@ export default function AnalysisResults({ onNavigate }: AnalysisResultsProps) {
                   <div key={index} className="border border-border rounded-lg p-4">
                     <div className="flex items-center justify-between mb-3">
                       <h4 className="font-medium">{risk.category}</h4>
-                      <Badge className={
-                        risk.level === 'Low' ? 'bg-green-100 text-green-800' :
-                        risk.level === 'Medium' ? 'bg-orange-100 text-orange-800' :
-                        'bg-red-100 text-red-800'
-                      }>
+                      <Badge className={getRiskLevelColor(risk.level)}>
                         {risk.level} Risk
                       </Badge>
                     </div>
@@ -421,71 +459,68 @@ export default function AnalysisResults({ onNavigate }: AnalysisResultsProps) {
           </Card>
         </TabsContent>
 
-        <TabsContent value="recommendations" className="space-y-6">
+        <TabsContent value="actions" className="space-y-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <CheckCircle className="w-5 h-5 text-green-600" />
-                <span>Procurement Recommendations</span>
+                <span>Recommended Action Plan</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
-                <div className="p-4 border-2 border-green-200 bg-green-50 rounded-lg">
+                {/* Primary Risk Summary */}
+                <div className="p-4 border-2 border-red-200 bg-red-50 rounded-lg">
                   <div className="flex items-center space-x-2 mb-3">
-                    <Star className="w-5 h-5 text-green-600" />
-                    <h4 className="font-semibold text-green-800">Primary Recommendation</h4>
+                    <AlertTriangle className="w-5 h-5 text-red-600" />
+                    <h4 className="font-semibold text-red-800">Critical Risk Alert</h4>
                   </div>
-                  <p className="text-green-700 mb-3">
-                    <strong>Global Supply Co</strong> offers the best overall value with $487,000 in savings (9.8%) 
-                    while maintaining acceptable risk levels and compliance standards.
+                  <p className="text-red-700 mb-3">
+                    <strong>High overall risk score ({riskData?.total_risk_score}/5)</strong> due to significant data gaps
+                    across multiple risk dimensions. Immediate action required to mitigate critical risks.
                   </p>
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <span className="text-green-600 font-medium">Pros:</span>
-                      <ul className="list-disc list-inside text-green-700 mt-1">
-                        <li>Lowest total cost of ownership</li>
-                        <li>Full compliance certification</li>
-                        <li>Competitive lead times</li>
-                      </ul>
-                    </div>
-                    <div>
-                      <span className="text-orange-600 font-medium">Considerations:</span>
-                      <ul className="list-disc list-inside text-orange-700 mt-1">
-                        <li>Slightly longer lead time than TechCorp</li>
-                        <li>Lower risk score than TechCorp</li>
-                      </ul>
-                    </div>
-                  </div>
                 </div>
 
+                {/* Action Items */}
                 <div className="space-y-4">
-                  <h4 className="font-medium">Alternative Strategies</h4>
-                  
-                  <div className="p-4 border border-border rounded-lg">
-                    <h5 className="font-medium mb-2">Split Award Strategy</h5>
-                    <p className="text-sm text-muted-foreground mb-2">
-                      Consider awarding 70% to Global Supply Co and 30% to TechCorp Industries to balance cost savings with risk mitigation.
-                    </p>
-                    <Badge variant="outline">Savings: $341,000 | Risk: Lower</Badge>
-                  </div>
+                  <h4 className="font-medium">Required Actions</h4>
 
-                  <div className="p-4 border border-border rounded-lg">
-                    <h5 className="font-medium mb-2">Premium Quality Option</h5>
-                    <p className="text-sm text-muted-foreground mb-2">
-                      TechCorp Industries offers the highest quality and fastest delivery, suitable for critical timeline requirements.
-                    </p>
-                    <Badge variant="outline">Premium: $142,000 | Risk: Lowest</Badge>
-                  </div>
+                  {actionItems.length > 0 ? (
+                    actionItems.map((action: any, index: number) => (
+                      <div key={index} className="p-4 border border-border rounded-lg">
+                        <div className="flex items-start justify-between mb-2">
+                          <h5 className="font-medium flex-1">{action.action}</h5>
+                          <Badge variant="outline" className="ml-2">
+                            {action.responsible}
+                          </Badge>
+                        </div>
+                        <div className="flex items-center justify-between text-sm text-muted-foreground">
+                          <span>Due: {action.due_date}</span>
+                          <Badge className={
+                            action.status === "Open" ? "bg-orange-100 text-orange-800" :
+                            action.status === "In Progress" ? "bg-blue-100 text-blue-800" :
+                            "bg-green-100 text-green-800"
+                          }>
+                            {action.status}
+                          </Badge>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="p-4 border border-border rounded-lg">
+                      <p className="text-muted-foreground">No specific action items generated. Address the identified data gaps first.</p>
+                    </div>
+                  )}
                 </div>
 
-                <div className="p-4 bg-orange-50 border border-orange-200 rounded-lg">
-                  <h4 className="font-medium text-orange-800 mb-2">Action Items</h4>
-                  <ul className="text-sm text-orange-700 space-y-1">
-                    <li>• Verify Premier Solutions ISO certification status</li>
-                    <li>• Confirm freight estimates with Global Supply Co</li>
-                    <li>• Negotiate payment terms with TechCorp if selected</li>
-                    <li>• Request updated pricing for Control Panel items</li>
+                {/* Data Improvement Strategy */}
+                <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <h4 className="font-medium text-blue-800 mb-2">Data Improvement Strategy</h4>
+                  <ul className="text-sm text-blue-700 space-y-1">
+                    <li>• Request complete and accessible documentation from all suppliers</li>
+                    <li>• Prioritize collection of pricing, lead time, and payment terms data</li>
+                    <li>• Verify supplier certifications and compliance documentation</li>
+                    <li>• Establish data quality standards for future procurement processes</li>
                   </ul>
                 </div>
               </div>

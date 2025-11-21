@@ -5,11 +5,11 @@ import { Card } from './ui/card';
 import { Avatar } from './ui/avatar';
 import { Badge } from './ui/badge';
 import { ScrollArea } from './ui/scroll-area';
-import { 
-  Send, 
-  Sparkles, 
-  Upload as UploadIcon, 
-  FileText, 
+import {
+  Send,
+  Sparkles,
+  Upload as UploadIcon,
+  FileText,
   Image as ImageIcon,
   X,
   Paperclip,
@@ -24,11 +24,100 @@ interface Message {
   content: string;
   timestamp: Date;
   files?: File[];
+  metadata?: any;
 }
 
 interface ClareAIInterfaceProps {
   onNavigate?: (view: string) => void;
 }
+
+// Fixed apiService to match agent response format
+const apiService = {
+  // Send message to agent service (POST format)
+  async sendMessage(message: string) {
+    console.log('Sending message:', message);
+
+    const response = await fetch('http://localhost:8001/api/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ message }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Response not OK:', response.status, errorText);
+      throw new Error(`Failed to send message: ${response.status} ${errorText}`);
+    }
+
+    return response.json();
+  },
+
+  // Upload files for analysis
+  async uploadFiles(files: File[]) {
+    const formData = new FormData();
+
+    files.forEach(file => {
+      formData.append('files', file);
+    });
+
+    const response = await fetch('http://localhost:8001/api/add-offer', {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to upload files');
+    }
+
+    return response.json();
+  },
+
+  // Process files with agent - for immediate chat response
+  async processFilesWithAgent(files: File[]) {
+    const formData = new FormData();
+
+    files.forEach(file => {
+      formData.append('files', file);
+    });
+
+    console.log('Sending files:', files.map(f => ({ name: f.name, size: f.size, type: f.type })));
+
+    const response = await fetch('http://localhost:8001/api/process-files', {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Process files response not OK:', response.status, errorText);
+      throw new Error(`Failed to process files: ${response.status} ${errorText}`);
+    }
+
+    return response.json();
+  },
+
+  // Full analysis with weights
+  async analyzeOffers(weights: any = {}) {
+    const formData = new FormData();
+
+    Object.keys(weights).forEach(key => {
+      formData.append(key, weights[key].toString());
+    });
+
+    const response = await fetch('http://localhost:8001/api/analyze', {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to analyze offers');
+    }
+
+    return response.json();
+  }
+};
 
 export default function ClareAIInterface({ onNavigate }: ClareAIInterfaceProps) {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -44,9 +133,7 @@ export default function ClareAIInterface({ onNavigate }: ClareAIInterfaceProps) 
   };
 
   useEffect(() => {
-    if (messages.length > 0) {
-      scrollToBottom();
-    }
+    scrollToBottom();
   }, [messages]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,81 +162,77 @@ export default function ClareAIInterface({ onNavigate }: ClareAIInterfaceProps) 
     setSelectedFiles([]);
     setIsTyping(true);
 
-    setTimeout(() => {
-      const response = generateAIResponse(input, selectedFiles);
-      setMessages(prev => [...prev, response]);
+    try {
+      let response;
+
+      if (selectedFiles.length > 0) {
+        console.log('Processing files:', selectedFiles.map(f => f.name));
+        response = await apiService.processFilesWithAgent(selectedFiles);
+      } else {
+        console.log('Sending text message:', input);
+        response = await apiService.sendMessage(input);
+      }
+
+      console.log('Received response:', response);
+
+      // Handle different response formats from agent
+      let responseContent = '';
+      let responseMetadata = {};
+
+      if (response.content) {
+        // Agent response format from /api/chat and /api/process-files
+        responseContent = response.content;
+        responseMetadata = response.metadata || {};
+      } else if (response.message) {
+        // Alternative format from other endpoints
+        responseContent = response.message;
+        responseMetadata = response.metadata || {};
+      } else if (typeof response === 'string') {
+        // Fallback for string responses
+        responseContent = response;
+      } else {
+        // Fallback for any other format
+        responseContent = "I've processed your request successfully.";
+      }
+
+      const assistantMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: responseContent,
+        timestamp: new Date(),
+        metadata: responseMetadata,
+      };
+
+      setMessages(prev => [...prev, assistantMessage]);
+
+      // Handle navigation based on keywords in user input
+      const lowerInput = input.toLowerCase();
+      if (lowerInput.includes('create') && (lowerInput.includes('rfx') || lowerInput.includes('rfq') || lowerInput.includes('rfp'))) {
+        setTimeout(() => onNavigate?.('create-rfx'), 500);
+      } else if (lowerInput.includes('upload') && (lowerInput.includes('offer') || lowerInput.includes('quote') || lowerInput.includes('proposal'))) {
+        setTimeout(() => onNavigate?.('upload'), 500);
+      } else if (lowerInput.includes('analyz') || lowerInput.includes('analys')) {
+        setTimeout(() => onNavigate?.('analysis'), 500);
+      } else if (lowerInput.includes('report')) {
+        setTimeout(() => onNavigate?.('report'), 500);
+      } else if (lowerInput.includes('dashboard') || lowerInput.includes('overview')) {
+        setTimeout(() => onNavigate?.('dashboard'), 500);
+      }
+
+    } catch (error) {
+      console.error('Error sending message:', error);
+
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: `I'm having trouble connecting to my services. Please check if the backend and agent services are running. Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        timestamp: new Date(),
+      };
+
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
       setIsTyping(false);
-    }, 1000);
-  };
-
-  const generateAIResponse = (userInput: string, files: File[]): Message => {
-    const lowerInput = userInput.toLowerCase();
-
-    if (files.length > 0) {
-      return {
-        id: Date.now().toString(),
-        role: 'assistant',
-        content: `I've received ${files.length} file${files.length > 1 ? 's' : ''}. I can analyze supplier offers, extract line items, compare pricing, and identify key terms. Would you like me to proceed with the analysis?`,
-        timestamp: new Date(),
-      };
     }
-
-    if (lowerInput.includes('create') && (lowerInput.includes('rfx') || lowerInput.includes('rfq') || lowerInput.includes('rfp'))) {
-      setTimeout(() => onNavigate?.('create-rfx'), 500);
-      return {
-        id: Date.now().toString(),
-        role: 'assistant',
-        content: "I'll help you create a new RFX. Opening the RFX wizard now...",
-        timestamp: new Date(),
-      };
-    }
-
-    if (lowerInput.includes('upload') && (lowerInput.includes('offer') || lowerInput.includes('quote') || lowerInput.includes('proposal'))) {
-      setTimeout(() => onNavigate?.('upload'), 500);
-      return {
-        id: Date.now().toString(),
-        role: 'assistant',
-        content: "Opening the offer upload page where you can add supplier proposals...",
-        timestamp: new Date(),
-      };
-    }
-
-    if (lowerInput.includes('analyz') || lowerInput.includes('analys')) {
-      setTimeout(() => onNavigate?.('analysis'), 500);
-      return {
-        id: Date.now().toString(),
-        role: 'assistant',
-        content: "Taking you to the analysis dashboard...",
-        timestamp: new Date(),
-      };
-    }
-
-    if (lowerInput.includes('report')) {
-      setTimeout(() => onNavigate?.('report'), 500);
-      return {
-        id: Date.now().toString(),
-        role: 'assistant',
-        content: "Opening the executive report view...",
-        timestamp: new Date(),
-      };
-    }
-
-    if (lowerInput.includes('dashboard') || lowerInput.includes('overview')) {
-      setTimeout(() => onNavigate?.('dashboard'), 500);
-      return {
-        id: Date.now().toString(),
-        role: 'assistant',
-        content: "Showing your RFX dashboard...",
-        timestamp: new Date(),
-      };
-    }
-
-    return {
-      id: Date.now().toString(),
-      role: 'assistant',
-      content: "I can help you with:\n• Creating and managing RFXs\n• Analyzing supplier offers and extracting data\n• Comparing bids and generating insights\n• Creating executive reports\n• Reviewing line items and contracts\n\nWhat would you like to work on?",
-      timestamp: new Date(),
-    };
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -164,25 +247,61 @@ export default function ClareAIInterface({ onNavigate }: ClareAIInterfaceProps) 
       icon: FileText,
       title: 'Create RFX',
       description: 'Start a new Request for X',
-      action: () => onNavigate?.('create-rfx'),
+      action: () => {
+        const userMessage: Message = {
+          id: Date.now().toString(),
+          role: 'user',
+          content: 'Create a new RFX',
+          timestamp: new Date(),
+        };
+        setMessages(prev => [...prev, userMessage]);
+        setTimeout(() => onNavigate?.('create-rfx'), 500);
+      },
     },
     {
       icon: UploadIcon,
       title: 'Upload Offers',
       description: 'Add supplier proposals',
-      action: () => onNavigate?.('upload'),
+      action: () => {
+        const userMessage: Message = {
+          id: Date.now().toString(),
+          role: 'user',
+          content: 'Upload supplier offers',
+          timestamp: new Date(),
+        };
+        setMessages(prev => [...prev, userMessage]);
+        setTimeout(() => onNavigate?.('upload'), 500);
+      },
     },
     {
       icon: BarChart3,
       title: 'Analyze Bids',
       description: 'Compare and evaluate offers',
-      action: () => onNavigate?.('analysis'),
+      action: () => {
+        const userMessage: Message = {
+          id: Date.now().toString(),
+          role: 'user',
+          content: 'Analyze bids and offers',
+          timestamp: new Date(),
+        };
+        setMessages(prev => [...prev, userMessage]);
+        setTimeout(() => onNavigate?.('analysis'), 500);
+      },
     },
     {
       icon: FileSpreadsheet,
       title: 'Generate Report',
       description: 'Create executive summary',
-      action: () => onNavigate?.('report'),
+      action: () => {
+        const userMessage: Message = {
+          id: Date.now().toString(),
+          role: 'user',
+          content: 'Generate executive report',
+          timestamp: new Date(),
+        };
+        setMessages(prev => [...prev, userMessage]);
+        setTimeout(() => onNavigate?.('report'), 500);
+      },
     },
   ];
 
@@ -220,7 +339,7 @@ export default function ClareAIInterface({ onNavigate }: ClareAIInterfaceProps) 
             </div>
             <h1 className="text-4xl">Welcome to Clare AI</h1>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Your intelligent procurement assistant. Upload supplier offers, analyze bids, create RFXs, 
+              Your intelligent procurement assistant. Upload supplier offers, analyze bids, create RFXs,
               and get instant insights powered by AI.
             </p>
           </div>
