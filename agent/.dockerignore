@@ -1,0 +1,25 @@
+# ==========================================
+# agent/.dockerignore
+# ==========================================
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+.pytest_cache
+.env
+.env.local
+.venv
+venv
+ENV
+env
+.git
+.gitignore
+.idea
+.vscode
+.DS_Store
+*.log
+tmp
+temp
+*.md
+README.md

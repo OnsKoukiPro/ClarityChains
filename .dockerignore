@@ -1,0 +1,42 @@
+# ==========================================
+# .dockerignore (ROOT DIRECTORY)
+# ==========================================
+**/__pycache__
+**/*.pyc
+**/*.pyo
+**/*.pyd
+**/.Python
+**/.pytest_cache
+**/.coverage
+**/htmlcov
+**/.env
+**/.env.local
+**/.env.*.local
+**/.venv
+**/venv
+**/ENV
+**/env
+**/.git
+**/.gitignore
+**/.gitattributes
+**/.idea
+**/.vscode
+**/.DS_Store
+**/node_modules
+**/dist
+**/build
+**/*.log
+**/tmp
+**/temp
+**/*.sqlite3
+**/db.sqlite3
+**/media
+**/staticfiles
+**/*.md
+**/README.md
+**/LICENSE
+**/.github
+**/.gitlab
+**/docker-compose*.yml
+**/Dockerfile*
+**/.dockerignore

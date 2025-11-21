@@ -1,0 +1,33 @@
+
+# ==========================================
+# backend/.dockerignore
+# ==========================================
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+.pytest_cache
+.coverage
+htmlcov
+.env
+.env.local
+.venv
+venv
+ENV
+env
+.git
+.gitignore
+.idea
+.vscode
+.DS_Store
+*.log
+tmp
+temp
+*.sqlite3
+db.sqlite3
+media
+staticfiles
+*.md
+README.md
+LICENSE
