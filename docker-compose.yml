@@ -14,7 +14,7 @@ services:
     environment:
       - POSTGRES_DB=claritychain
       - POSTGRES_USER=claritychain_user
-      - POSTGRES_PASSWORD=secure_password_change_me
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-change_me}
     ports:
       - "5432:5432"
     healthcheck:
@@ -56,10 +56,10 @@ services:
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
       - ENVIRONMENT=production
       - BACKEND_URL=http://backend:8000
-      - AZURE_OPENAI_ENDPOINT=https://claritychainprod.openai.azure.com/
+      - AZURE_OPENAI_ENDPOINT=${AZURE_OPENAI_ENDPOINT}
       - AZURE_OPENAI_API_KEY=${AZURE_OPENAI_API_KEY}
       - AZURE_OPENAI_API_VERSION=2024-12-01-preview
-      - AZURE_OPENAI_DEPLOYMENT_NAME=ClarityChain
+      - AZURE_OPENAI_DEPLOYMENT_NAME=${AZURE_OPENAI_DEPLOYMENT_NAME:-gpt-4o}
       - AZURE_OPENAI_MODEL_NAME=gpt-4o
       - USE_RETRIEVER=true
       - AZURE_OPENAI_EMBEDDING_DEPLOYMENT=text-embedding-ada-002
@@ -90,7 +90,7 @@ services:
     environment:
       - DEBUG=False
       - SECRET_KEY=${SECRET_KEY:-your-default-secret-key-change-in-production}
-      - DATABASE_URL=postgresql://claritychain_user:secure_password_change_me@db:5432/claritychain
+      - DATABASE_URL=postgresql://claritychain_user:${POSTGRES_PASSWORD:-change_me}@db:5432/claritychain
       - AGENT_API_URL=http://agent:8001
       - REDIS_URL=redis://redis:6379/0
       - ALLOWED_HOSTS=localhost,backend,nginx,127.0.0.1,0.0.0.0

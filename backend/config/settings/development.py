@@ -4,7 +4,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-SECRET_KEY = 'django-insecure-your-development-secret-key-here'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-only-insecure-key')
 DEBUG = True
 ALLOWED_HOSTS = ['*']
 
