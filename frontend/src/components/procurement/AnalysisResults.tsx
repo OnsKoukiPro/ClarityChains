@@ -33,38 +33,110 @@ export default function AnalysisResults({ onNavigate, analysisData }: AnalysisRe
 
   // Use actual analysis data or fallback to mock data
   const actualData = analysisData || {
-    offers_analyzed: 1,
+    offers_analyzed: 3,
     analysis_data: [
       {
-        offer_name: "Offer 1",
-        supplier_name: "OneSubsea",
+        offer_name: "Offer 2",
+        supplier_name: "Global Supply Co",
         summary_metrics: {
-          "Total Price": "N/A",
-          "Lead Time": "N/A",
-          "Payment Terms": "N/A"
+          "Total Price": "$4,625,000",
+          "Lead Time": "2.8 weeks",
+          "Payment Terms": "Net 45"
         },
         risk: {
-          total_risk_score: 4.2,
-          risk_level: "High",
+          total_risk_score: 2.1,
+          risk_level: "Medium",
+          summary: "Lowest total landed cost with full certification coverage. Freight estimate is provisional and should be confirmed before award.",
           dimension_scores: {
-            "Delivery Risk": 4.5,
-            "Financial Risk": 3.5,
-            "Technical Risk": 4.5,
-            "Quality Risk": 4.0,
-            "HSE / Compliance Risk": 4.5,
-            "Geopolitical / Supply Risk": 3.5,
-            "ESG / Reputation Risk": 4.0
+            "Delivery Risk": 2.8,
+            "Financial Risk": 1.5,
+            "Technical Risk": 2.0,
+            "Quality Risk": 1.8,
+            "HSE / Compliance Risk": 1.4,
+            "Geopolitical / Supply Risk": 2.6,
+            "ESG / Reputation Risk": 1.6
+          },
+          detailed_risk_analysis: {
+            rows: [
+              ["Delivery Risk", 2.8, "Lead time 0.7 weeks longer than fastest bidder", "Add delivery milestones and late-delivery penalties to the contract"],
+              ["Geopolitical / Supply Risk", 2.6, "Control panels sourced from a single overseas plant", "Ask for a secondary manufacturing site or buffer stock"],
+              ["Financial Risk", 1.5, "Freight cost quoted as estimate only", "Request a fixed freight quote before award"]
+            ]
           }
         },
+        detailed_gap_analysis: {
+          rows: [
+            ["Unit Pricing", "Complete for all 4 line items", "No gap"],
+            ["Freight & Logistics", "Estimate only", "Fixed quote required"],
+            ["Certifications", "ISO 9001, ISO 14001", "No gap"],
+            ["Warranty", "24 months", "Matches RFX requirement"],
+            ["Payment Terms", "Net 45", "Within policy"]
+          ]
+        },
         recommendation: "Best Offer",
-        total_weighted_score: 16
+        total_weighted_score: 86
+      },
+      {
+        offer_name: "Offer 1",
+        supplier_name: "TechCorp Industries",
+        summary_metrics: {
+          "Total Price": "$5,112,000",
+          "Lead Time": "2.1 weeks",
+          "Payment Terms": "Net 30"
+        },
+        risk: {
+          total_risk_score: 1.7,
+          risk_level: "Low",
+          summary: "Strongest delivery and quality profile, priced about 10% above the recommended offer.",
+          dimension_scores: {
+            "Delivery Risk": 1.4,
+            "Financial Risk": 1.6,
+            "Technical Risk": 1.5,
+            "Quality Risk": 1.3,
+            "HSE / Compliance Risk": 1.5,
+            "Geopolitical / Supply Risk": 2.2,
+            "ESG / Reputation Risk": 1.9
+          }
+        },
+        recommendation: "Alternative",
+        total_weighted_score: 81
+      },
+      {
+        offer_name: "Offer 3",
+        supplier_name: "Premier Solutions",
+        summary_metrics: {
+          "Total Price": "$5,387,000",
+          "Lead Time": "2.6 weeks",
+          "Payment Terms": "Net 30"
+        },
+        risk: {
+          total_risk_score: 3.4,
+          risk_level: "Medium",
+          summary: "Highest cost and missing ISO certification for critical components.",
+          dimension_scores: {
+            "Delivery Risk": 2.4,
+            "Financial Risk": 2.9,
+            "Technical Risk": 3.1,
+            "Quality Risk": 3.6,
+            "HSE / Compliance Risk": 4.2,
+            "Geopolitical / Supply Risk": 2.5,
+            "ESG / Reputation Risk": 3.0
+          }
+        },
+        recommendation: "Not Recommended",
+        total_weighted_score: 64
       }
     ],
     comparison_summary: {
       comparison_summary: {
         comparison_table: [],
-        ai_insights: "No analysis data available.",
-        action_list: []
+        ai_insights: "Global Supply Co offers the lowest total landed cost ($4.63M, $487K below TechCorp) with full compliance. TechCorp is the safest alternative on delivery and quality. Premier Solutions is the most expensive offer and lacks ISO certification for control panels; control panel prices vary by up to 45% across bidders and should be verified.",
+        action_list: [
+          { action: "Request a fixed freight quote from Global Supply Co", responsible: "Procurement Team", due_date: "2024-12-06", status: "Open" },
+          { action: "Verify control panel pricing across all three bidders", responsible: "Technical Team", due_date: "2024-12-08", status: "In Progress" },
+          { action: "Confirm Premier Solutions ISO certification status", responsible: "Procurement Team", due_date: "2024-12-05", status: "Open" },
+          { action: "Negotiate delivery milestones and penalties", responsible: "Finance Team", due_date: "2024-12-10", status: "Open" }
+        ]
       }
     }
   };
@@ -109,6 +181,8 @@ export default function AnalysisResults({ onNavigate, analysisData }: AnalysisRe
   })) || [];
 
   const actionItems = comparison_summary?.comparison_summary?.action_list || [];
+  const filledGaps = gapAnalysis.filter(gap => gap.details !== "N/A").length;
+  const hasDataGaps = filledGaps < gapAnalysis.length || gapAnalysis.length === 0;
 
   function getRiskDescription(category: string, score: number): string {
     if (score <= 1.5) return `Low ${category.toLowerCase()} risk`;
@@ -204,10 +278,10 @@ export default function AnalysisResults({ onNavigate, analysisData }: AnalysisRe
               <div>
                 <p className="text-sm text-muted-foreground">Data Quality</p>
                 <p className="text-2xl font-semibold">
-                  {gapAnalysis.filter(gap => gap.details !== "N/A").length > 0 ? "Partial" : "Limited"}
+                  {!hasDataGaps ? "Complete" : filledGaps > 0 ? "Partial" : "Limited"}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  {gapAnalysis.filter(gap => gap.details !== "N/A").length}/{gapAnalysis.length} metrics
+                  {filledGaps}/{gapAnalysis.length} metrics
                 </p>
               </div>
               <BarChart3 className="w-8 h-8 text-purple-600" />
@@ -418,16 +492,18 @@ export default function AnalysisResults({ onNavigate, analysisData }: AnalysisRe
                 ))}
               </div>
 
-              <div className="mt-6 p-4 bg-orange-50 rounded-lg">
-                <div className="flex items-center space-x-2 mb-2">
-                  <Flag className="w-4 h-4 text-orange-600" />
-                  <span className="font-medium text-orange-800">Data Quality Alert</span>
+              {hasDataGaps && (
+                <div className="mt-6 p-4 bg-orange-50 rounded-lg">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <Flag className="w-4 h-4 text-orange-600" />
+                    <span className="font-medium text-orange-800">Data Quality Alert</span>
+                  </div>
+                  <p className="text-sm text-orange-700">
+                    Multiple data gaps detected. The analysis is limited by missing critical information from supplier documents.
+                    Consider requesting complete documentation for more accurate assessment.
+                  </p>
                 </div>
-                <p className="text-sm text-orange-700">
-                  Multiple data gaps detected. The analysis is limited by missing critical information from supplier documents.
-                  Consider requesting complete documentation for more accurate assessment.
-                </p>
-              </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -470,16 +546,18 @@ export default function AnalysisResults({ onNavigate, analysisData }: AnalysisRe
             <CardContent>
               <div className="space-y-6">
                 {/* Primary Risk Summary */}
-                <div className="p-4 border-2 border-red-200 bg-red-50 rounded-lg">
-                  <div className="flex items-center space-x-2 mb-3">
-                    <AlertTriangle className="w-5 h-5 text-red-600" />
-                    <h4 className="font-semibold text-red-800">Critical Risk Alert</h4>
+                {riskData?.risk_level === "High" && (
+                  <div className="p-4 border-2 border-red-200 bg-red-50 rounded-lg">
+                    <div className="flex items-center space-x-2 mb-3">
+                      <AlertTriangle className="w-5 h-5 text-red-600" />
+                      <h4 className="font-semibold text-red-800">Critical Risk Alert</h4>
+                    </div>
+                    <p className="text-red-700 mb-3">
+                      <strong>High overall risk score ({riskData?.total_risk_score}/5)</strong> due to significant data gaps
+                      across multiple risk dimensions. Immediate action required to mitigate critical risks.
+                    </p>
                   </div>
-                  <p className="text-red-700 mb-3">
-                    <strong>High overall risk score ({riskData?.total_risk_score}/5)</strong> due to significant data gaps
-                    across multiple risk dimensions. Immediate action required to mitigate critical risks.
-                  </p>
-                </div>
+                )}
 
                 {/* Action Items */}
                 <div className="space-y-4">

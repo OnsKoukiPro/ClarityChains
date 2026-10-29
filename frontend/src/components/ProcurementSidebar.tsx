@@ -1,5 +1,4 @@
 import React from "react";
-import { cn } from "./ui/utils";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import {
@@ -10,6 +9,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarFooter,
+  useSidebar,
 } from "./ui/sidebar";
 import {
   LayoutDashboard,
@@ -37,6 +37,7 @@ export default function ProcurementSidebar({
   currentView,
   onNavigate,
 }: ProcurementSidebarProps) {
+  const { setOpenMobile } = useSidebar();
   const menuItems = [
     {
       id: "conversational",
@@ -90,7 +91,7 @@ export default function ProcurementSidebar({
   ];
 
   return (
-    <Sidebar className="w-65 border-r border-border">
+    <Sidebar className="border-r border-border">
       <SidebarHeader className="p-6">
         <div className="flex items-center space-x-3">
           {/* Replace the C with your logo */}
@@ -117,22 +118,14 @@ export default function ProcurementSidebar({
           {menuItems.map((item) => (
             <SidebarMenuItem key={item.id}>
               <SidebarMenuButton
-                onClick={() => onNavigate(item.id)}
-                className={cn(
-                  "w-full flex items-center space-x-4 p-6 min-h-20 rounded-lg transition-colors group",
-                  currentView === item.id
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "hover:bg-accent text-foreground",
-                )}
+                isActive={currentView === item.id}
+                onClick={() => {
+                  onNavigate(item.id);
+                  setOpenMobile(false);
+                }}
+                className="cc-nav-item w-full flex items-center space-x-4 p-6 min-h-20 rounded-lg"
               >
-                <item.icon
-                  className={cn(
-                    "w-6 h-6",
-                    currentView === item.id
-                      ? "text-primary-foreground"
-                      : "text-muted-foreground group-hover:text-accent-foreground",
-                  )}
-                />
+                <item.icon className="cc-nav-icon w-6 h-6" />
                 <div className="flex-1 text-left">
                   <div className="font-medium text-base">
                     {item.label}
@@ -142,16 +135,7 @@ export default function ProcurementSidebar({
                       </Badge>
                     )}
                   </div>
-                  <div
-                    className={cn(
-                      "text-sm",
-                      currentView === item.id
-                        ? "text-primary-foreground/80"
-                        : "text-muted-foreground",
-                    )}
-                  >
-                    {item.description}
-                  </div>
+                  <div className="cc-nav-desc text-sm">{item.description}</div>
                 </div>
               </SidebarMenuButton>
             </SidebarMenuItem>

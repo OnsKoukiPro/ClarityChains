@@ -223,8 +223,8 @@ Key findings include significant price variations across suppliers (up to 45% fo
             <div className="border-l-4 border-primary pl-4">
               <p className="font-medium text-primary">Recommendation Summary:</p>
               <p className="text-sm text-muted-foreground mt-1">
-                Award primary contract to <strong>{reportData.recommendedSupplier}</strong> for ${reportData.totalValue} 
-                with potential for {reportData.savingsPercentage} cost reduction. Consider {reportData.alternativeSupplier} 
+                Award primary contract to <strong>{reportData.recommendedSupplier}</strong> for {reportData.totalValue}{" "}
+                with potential for {reportData.savingsPercentage} cost reduction. Consider {reportData.alternativeSupplier}{" "}
                 as backup supplier for risk mitigation.
               </p>
             </div>

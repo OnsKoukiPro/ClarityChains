@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { SidebarProvider } from './components/ui/sidebar';
 import ProcurementSidebar from './components/ProcurementSidebar';
 import ProcurementHeader from './components/ProcurementHeader';
+import DemoBanner from './components/DemoBanner';
 import ClareAIInterface from './components/ClareAIInterface';
 import ClareAssistant from './components/ClareAssistant';
 import RFXDashboard from './components/procurement/RFXDashboard';
@@ -43,16 +44,17 @@ export default function ClarityChainApp() {
   };
 
   return (
-    <SidebarProvider>
+    <SidebarProvider style={{ '--sidebar-width': '18.5rem' } as React.CSSProperties}>
+      <DemoBanner />
       <div className="flex min-h-screen w-full bg-background">
         <div className="flex-shrink-0">
           <ProcurementSidebar currentView={currentView} onNavigate={setCurrentView} />
         </div>
         <div className="flex-1 flex flex-col min-w-0">
-          <div className="px-6">
+          <div className="cc-header-wrap px-6">
             <ProcurementHeader onNavigate={setCurrentView} />
           </div>
-          <main className="flex-1 w-full min-w-0 p-6 overflow-auto">
+          <main className="cc-main flex-1 w-full min-w-0 p-6 overflow-auto">
             {renderCurrentView()}
           </main>
         </div>

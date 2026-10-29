@@ -4352,3 +4352,122 @@ body {
     transform: translate3d(var(--tw-exit-translate-x, 0), var(--tw-exit-translate-y, 0), 0) scale3d(var(--tw-exit-scale, 1), var(--tw-exit-scale, 1), var(--tw-exit-scale, 1)) rotate(var(--tw-exit-rotate, 0));
   }
 }
+
+/* Hand-written rules. index.css is precompiled Tailwind, so new utility classes are not generated. */
+
+/* Sidebar nav: keep active state readable on hover, and scope icon hover to the item, not the whole sidebar */
+.cc-nav-item {
+  color: var(--foreground);
+  transition: background-color .15s ease, color .15s ease;
+}
+.cc-nav-item:hover {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+.cc-nav-item[data-active="true"],
+.cc-nav-item[data-active="true"]:hover {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  box-shadow: 0 1px 2px rgb(0 0 0 / .08);
+}
+.cc-nav-item .cc-nav-icon,
+.cc-nav-item .cc-nav-desc {
+  color: var(--muted-foreground);
+  transition: color .15s ease;
+}
+.cc-nav-item:hover .cc-nav-icon {
+  color: var(--accent-foreground);
+}
+.cc-nav-item[data-active="true"] .cc-nav-icon {
+  color: var(--primary-foreground);
+}
+.cc-nav-item[data-active="true"] .cc-nav-desc {
+  color: color-mix(in oklab, var(--primary-foreground) 75%, transparent);
+}
+
+/* Mockup banner: fixed across the full width, sidebar and page are pushed down by its height */
+[data-slot="sidebar-wrapper"] {
+  padding-top: var(--cc-banner-h, 0px);
+}
+[data-slot="sidebar-container"] {
+  top: var(--cc-banner-h, 0px);
+  height: calc(100svh - var(--cc-banner-h, 0px));
+}
+.cc-demo-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: .625rem;
+  padding: .5rem 1.5rem;
+  background: #eef2ff;
+  border-bottom: 1px solid #c7d2fe;
+  color: #3730a3;
+  font-size: .8125rem;
+  line-height: 1.35;
+}
+.cc-demo-banner p {
+  flex: 1;
+  min-width: 0;
+}
+.cc-demo-banner svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+.cc-demo-banner a {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  font-weight: 500;
+  white-space: nowrap;
+  color: inherit;
+  text-decoration: none;
+  padding: .25rem .5rem;
+  border-radius: .375rem;
+}
+.cc-demo-banner a:hover {
+  background: #e0e7ff;
+}
+.cc-demo-banner button {
+  display: inline-flex;
+  padding: .25rem;
+  border-radius: .375rem;
+  color: inherit;
+  cursor: pointer;
+}
+.cc-demo-banner button:hover {
+  background: #e0e7ff;
+}
+
+/* Responsive helpers */
+.cc-mobile-only {
+  display: none;
+}
+@media (max-width: 767px) {
+  .cc-mobile-only {
+    display: inline-flex;
+  }
+  .cc-hide-mobile {
+    display: none;
+  }
+  .cc-demo-banner {
+    padding: .5rem 1rem;
+  }
+  .cc-header-wrap {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .cc-header {
+    padding: .75rem 1rem;
+  }
+  .cc-header-actions {
+    margin-left: .75rem;
+  }
+  .cc-main {
+    padding: 0;
+  }
+}
